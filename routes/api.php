@@ -2,29 +2,87 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// Auth
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+// API existente
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FavoriteController;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+// Admin
+use App\Http\Controllers\Admin\AdminStatsController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminMovieController;
+use App\Http\Controllers\Admin\AdminReviewController;
+use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\GenreController;
+use App\Http\Controllers\Admin\ActivityLogController;
+
+// ─────────────────────────────────────────────
+// PÚBLICAS
+// ─────────────────────────────────────────────
+Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::post('/login',    [AuthenticatedSessionController::class, 'store']);
+
+Route::get('/genres', [GenreController::class, 'index']);
+
+// ─────────────────────────────────────────────
+// USUARIO AUTENTICADO
+// ─────────────────────────────────────────────
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+    // Reseñas
+    Route::post('/reviews',        [ReviewController::class, 'store']);
+    Route::get('/my-reviews',      [ReviewController::class, 'myReviews']);
+    Route::put('/reviews/{id}',    [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
+    // Favoritos
+    Route::post('/favorites',        [FavoriteController::class, 'store']);
+    Route::get('/favorites',         [FavoriteController::class, 'index']);
+    Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
 });
 
-Route::middleware('auth:sanctum')->post('/reviews', [ReviewController::class, 'store']);
+// ─────────────────────────────────────────────
+// ADMIN — requiere auth:sanctum + rol admin/moderador
+// ─────────────────────────────────────────────
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
 
-Route::middleware('auth:sanctum')->get('/my-reviews', [ReviewController::class, 'myReviews']);
+    // Dashboard
+    Route::get('/stats', [AdminStatsController::class, 'index']);
 
-Route::middleware('auth:sanctum')->put('/reviews/{id}', [ReviewController::class, 'update']);
+    // Usuarios
+    Route::get('/users',                   [AdminUserController::class, 'index']);
+    Route::get('/users/{user}',            [AdminUserController::class, 'show']);
+    Route::put('/users/{user}',            [AdminUserController::class, 'update']);
+    Route::delete('/users/{user}',         [AdminUserController::class, 'destroy']);
+    Route::post('/users/{user}/suspend',   [AdminUserController::class, 'suspend']);
+    Route::post('/users/{user}/activate',  [AdminUserController::class, 'activate']);
 
-Route::middleware('auth:sanctum')->delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+    // Películas
+    Route::apiResource('/movies', AdminMovieController::class);
 
-Route::middleware('auth:sanctum')->post('/favorites', [FavoriteController::class, 'store']);
+    // Reseñas (moderación)
+    Route::get('/reviews',                 [AdminReviewController::class, 'index']);
+    Route::delete('/reviews/{review}',     [AdminReviewController::class, 'destroy']);
+    Route::post('/reviews/{review}/hide',  [AdminReviewController::class, 'hide']);
 
-Route::middleware('auth:sanctum')->get('/favorites', [FavoriteController::class, 'index']);
+    // Reportes
+    Route::get('/reports',                       [AdminReportController::class, 'index']);
+    Route::post('/reports/{report}/resolve',     [AdminReportController::class, 'resolve']);
+    Route::post('/reports/{report}/dismiss',     [AdminReportController::class, 'dismiss']);
 
-Route::middleware('auth:sanctum')->delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
+    // Géneros
+    Route::apiResource('/genres', GenreController::class)->except(['index']);
 
-Route::post('/register', [RegisteredUserController::class, 'store']);
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    // Actividad del sistema
+    Route::get('/activity', [ActivityLogController::class, 'index']);
+});

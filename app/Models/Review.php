@@ -28,4 +28,5 @@ class Review extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+    public function reports() { return $this->morphMany(Report::class, 'reportable'); }
 }
