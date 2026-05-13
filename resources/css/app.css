@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Forum&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: radial-gradient(circle, #301413, #000000);
+  --sidebar: #301413af;
+  --sidebar-active: #4D1519;
+  --panel: linear-gradient(to bottom, #301413, #72463b);
+  --panel-2: rgba(135, 104, 66, 0.682);
+  --surface: #72463b;
+  --accent: #e8e0d5;
+  --text: #f7f4ef;
+  --muted: #ae8c5f;
+  --danger: #e8856a;
+  --success: #7aab8a;
+  --border: #594B36;
+  --h1: 'Playfair Display', serif;
+  --h2: 'Forum', serif;
+  --txt: 'Montserrat', sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(circle at 40% 40%, #301413, #000000);
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+}

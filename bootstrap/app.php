@@ -11,25 +11,27 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-        // bootstrap/app.php — registrar el middleware
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+
+    ->withMiddleware(function (Middleware $middleware): void {
+
+        // Middleware para Inertia/frontend
+        $middleware->web(append: [
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-    })
-        ->withMiddleware(function (Middleware $middleware): void {
+
+        // Sanctum para API
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
+        // Alias personalizados
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
-
-        //
     })
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
-
-
