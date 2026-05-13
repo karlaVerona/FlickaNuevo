@@ -6,20 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    protected $table = 'movies';
-
     protected $fillable = [
-        'title',
-        'anio',
-        'director',
-        'genre',
-        'synopsis',
-        'poster'
+        'title', 'director', 'anio', 'genre', 'synopsis', 'poster'
     ];
-    public function genre()
-    {
-        return $this->belongsTo(Genre::class);
-    }
 
     public function reviews()
     {
