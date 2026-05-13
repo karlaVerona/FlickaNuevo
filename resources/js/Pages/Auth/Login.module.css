@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+/* ── LAYOUT ── */
+.page {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: #0d0505;
+}
+
+/* ── LEFT PANEL (65%) ── */
+.leftPanel {
+  position: relative;
+  width: 60%;
+  background: #8b1a1a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+  overflow: hidden;
+}
+
+.leftPanel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 110% 110%, #c0392b55 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at -10% -10%, #ff6b6b22 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.arcs {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 520px;
+  height: 520px;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+
+.leftLogo {
+  position: relative;
+  z-index: 1;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+.leftContent {
+  position: relative;
+  z-index: 1;
+}
+
+.headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 4.2rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.headline em {
+  font-style: italic;
+  color: #f0c040;
+}
+
+.description {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+.description strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.leftFooter {
+  position: relative;
+  z-index: 1;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+}
+
+/* ── RIGHT PANEL (35%) ── */
+.rightPanel {
+  width: 40%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 3rem;
+}
+
+.brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a0a0a;
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+}
+
+.brand span {
+  color: #8b1a1a;
+}
+
+.criticBadge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #8b1a1a;
+  background: #fdf0f0;
+  border: 1.5px solid #e8c0c0;
+  margin-bottom: 1.5rem;
+}
+
+.formTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a0a0a;
+  margin-bottom: 0.4rem;
+}
+
+.formSubtitle {
+  font-size: 1rem;
+  color: #999;
+  margin-bottom: 2rem;
+}
+
+/* ── FIELDS ── */
+.fieldGroup {
+  margin-bottom: 1.25rem;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 0.8rem 0.2rem;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1rem;
+  color: #1a0a0a;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #e8e8e8;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.fieldInput:focus {
+  border-bottom-color: #8b1a1a;
+}
+
+.fieldInput::placeholder {
+  color: #ccc;
+}
+
+.fieldError {
+  color: #c0392b;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+  display: block;
+}
+
+/* ── BUTTONS ── */
+.btnPrimary {
+  width: 100%;
+  padding: 0.9rem;
+  background: #c9a84c;
+  color: #1a0a0a;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 0.5rem;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #b8943e;
+  transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  width: 100%;
+  padding: 0.85rem;
+  background: #fff;
+  color: #1a0a0a;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btnSecondary:hover {
+  border-color: #8b1a1a;
+  background: #fdf5f5;
+}
+
+/* ── FOOTER LINK ── */
+.registerLink {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #bbb;
+}
+
+.registerLink a {
+  color: #8b1a1a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.registerLink a:hover {
+  border-bottom-color: #8b1a1a;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .leftPanel { display: none; }
+  .rightPanel { width: 100%; padding: 3rem 2rem; }
+}
