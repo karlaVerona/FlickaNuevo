@@ -1,17 +1,34 @@
-import { useForm, Head, Link } from '@inertiajs/react';
+import { useState } from 'react'
+import { router, Link, Head } from '@inertiajs/react'
+import api from '@/lib/axios'
 
 export default function Register() {
-    const { data, setData, post, processing, errors } = useForm({
+    const [data, setData] = useState({
         username: '',
         email: '',
         password: '',
         password_confirmation: '',
-    });
+    })
+    const [errors, setErrors] = useState({})
+    const [processing, setProcessing] = useState(false)
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route('register'));
-    };
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setProcessing(true)
+        setErrors({})
+        try {
+            const response = await api.post('/register', data)
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+            router.visit('/catalogo')
+        } catch (error) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
+            }
+        } finally {
+            setProcessing(false)
+        }
+    }
 
     return (
         <>
@@ -40,7 +57,7 @@ export default function Register() {
                             <input
                                 type="text"
                                 value={data.username}
-                                onChange={e => setData('username', e.target.value)}
+                                onChange={e => setData(prev => ({ ...prev, username: e.target.value }))}
                                 placeholder="cinéfilo_123"
                                 style={errors.username ? { ...styles.input, ...styles.inputError } : styles.input}
                             />
@@ -52,7 +69,7 @@ export default function Register() {
                             <input
                                 type="email"
                                 value={data.email}
-                                onChange={e => setData('email', e.target.value)}
+                                onChange={e => setData(prev => ({ ...prev, email: e.target.value }))}
                                 placeholder="tu@correo.com"
                                 style={errors.email ? { ...styles.input, ...styles.inputError } : styles.input}
                             />
@@ -64,7 +81,7 @@ export default function Register() {
                             <input
                                 type="password"
                                 value={data.password}
-                                onChange={e => setData('password', e.target.value)}
+                                onChange={e => setData(prev => ({ ...prev, password: e.target.value }))}
                                 placeholder="Mínimo 8 caracteres"
                                 style={errors.password ? { ...styles.input, ...styles.inputError } : styles.input}
                             />
@@ -76,7 +93,7 @@ export default function Register() {
                             <input
                                 type="password"
                                 value={data.password_confirmation}
-                                onChange={e => setData('password_confirmation', e.target.value)}
+                                onChange={e => setData(prev => ({ ...prev, password_confirmation: e.target.value }))}
                                 placeholder="Repite tu contraseña"
                                 style={errors.password_confirmation ? { ...styles.input, ...styles.inputError } : styles.input}
                             />
@@ -95,10 +112,9 @@ export default function Register() {
                 </div>
             </div>
         </>
-    );
+    )
 }
 
-// Reutilizamos exactamente los mismos estilos del Login
 const styles = {
     page: {
         minHeight: '100vh',
@@ -192,4 +208,4 @@ const styles = {
         cursor: 'pointer',
         marginTop: '0.5rem',
     },
-};
+}

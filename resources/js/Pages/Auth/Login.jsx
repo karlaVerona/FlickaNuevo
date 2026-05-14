@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
-import axios from 'axios'
+import api from '@/lib/axios'
 import styles from './Login.module.css'
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
     setProcessing(true)
     setErrors({})
     try {
-      const response = await axios.post('/api/login', {
+      const response = await api.post('/login', {
         email: data.email,
         password: data.password,
       })

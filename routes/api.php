@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 // API existente
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\MovieListController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminStatsController;
@@ -49,6 +50,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/favorites',        [FavoriteController::class, 'store']);
     Route::get('/favorites',         [FavoriteController::class, 'index']);
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
+
+    // Listas
+    Route::get('/lists',                              [MovieListController::class, 'index']);
+    Route::post('/lists',                             [MovieListController::class, 'store']);
+    Route::delete('/lists/{id}',                      [MovieListController::class, 'destroy']);
+    Route::post('/lists/{listId}/movies',             [MovieListController::class, 'addMovie']);
+    Route::delete('/lists/{listId}/movies/{movieId}', [MovieListController::class, 'removeMovie']);
 });
 
 // ─────────────────────────────────────────────
