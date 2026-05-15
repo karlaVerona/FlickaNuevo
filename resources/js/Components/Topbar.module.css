@@ -1,0 +1,100 @@
+/* ── TOPBAR ── */
+.topbar {
+  height: 10%;
+  background: #2a1010;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ── LADO IZQUIERDO: saludo ── */
+.greeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.greetingTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.greetingDate {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-top: 0.15rem;
+}
+
+/* ── LADO DERECHO: usuario ── */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userInfo {
+  text-align: right;
+}
+
+.userName {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  display: block;
+}
+
+.userPlan {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.73rem;
+  color: #c9a84c;
+  letter-spacing: 0.05em;
+}
+
+/* Círculo con iniciales del usuario */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #8b1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* Botones de icono (engranaje, moneda) */
+.iconBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconBtn:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}

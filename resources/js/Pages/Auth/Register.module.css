@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: radial-gradient(radial-gradient(circle, #301413 90%,#190706 10%));
+  overflow: hidden;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.panel {
+  position: relative;
+  z-index: 2;
+  width: 30%;
+  height: 90vh;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem 2.5rem;
+  /*overflow-y: auto; */
+}
+
+/* Scrollbar */
+/*.panel::-webkit-scrollbar {
+  width: 4px;
+}
+.panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.panel::-webkit-scrollbar-thumb {
+  background: #e8c0c0;
+  border-radius: 999px;
+}*/
+
+/* ── CABECERA DEL PANEL ── */
+.brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a0a0a;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+}
+
+.brand span {
+  color: #ae8c5f;
+  font-style: italic;
+}
+
+.newBadge {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.28rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8b1a1a;
+  background: #fdf0f0;
+  border: 1.5px solid #e8c0c0;
+  margin-bottom: 1.25rem;
+}
+
+.formTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #1a0a0a;
+  margin-bottom: 0.3rem;
+}
+
+.formSubtitle {
+  font-size: 0.92rem;
+  color: #999;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* ── CAMPOS ── */
+.fieldGroup {
+  margin-bottom: 1rem;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 0.4rem;
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 0.7rem 0.2rem;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 0.97rem;
+  color: #1a0a0a;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #e8e8e8;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.fieldInput:focus {
+  border-bottom-color: #8b1a1a;
+}
+
+.fieldInput::placeholder {
+  color: #ccc;
+}
+
+.fieldError {
+  color: #c0392b;
+  font-size: 0.78rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* ── BOTÓN PRINCIPAL ── */
+.btnPrimary {
+  width: 100%;
+  padding: 0.85rem;
+  background: #c9a84c;
+  color: #1a0a0a;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 0.75rem;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #b8943e;
+  transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── LINK DE LOGIN ── */
+.loginLink {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.loginLink a {
+  color: #8b1a1a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.loginLink a:hover {
+  border-bottom-color: #8b1a1a;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .panel {
+    width: 50%;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    width: 92%;
+    height: auto;
+    min-height: 80vh;
+  }
+}
