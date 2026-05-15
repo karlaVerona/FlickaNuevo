@@ -27,6 +27,20 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
+
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->name('login');
+Route::get('/peliculas', function () {
+    return Inertia::render('App/Peliculas');
+});
+
+Route::get('/busqueda', function () {
+    return Inertia::render('App/Busqueda');
+});
+
+Route::get('/aleatoria', function () {
+    return Inertia::render('App/Aleatoria');
+});Route::get('/register', function () {
+    return Inertia::render('Auth/Register');
+})->name('register');

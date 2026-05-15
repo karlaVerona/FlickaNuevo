@@ -21,15 +21,15 @@ use App\Http\Controllers\Admin\AdminReviewController;
 
 // ── PÚBLICAS ──────────────────────────────────────
 Route::post('/register', [RegisteredUserController::class, 'store']);
-//Route::post('/login',    [AuthenticatedSessionController::class, 'store']);
-Route::post('/login',    [ApiAuthController::class, 'login']); 
+Route::post('/login',    [AuthenticatedSessionController::class, 'store']);
+//Route::post('/login',    [ApiAuthController::class, 'login']); 
 
 // ── USUARIO AUTENTICADO ───────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', fn(Request $request) => $request->user());
-    //Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-    Route::post('/logout', [ApiAuthController::class, 'logout']);
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+    //Route::post('/logout', [ApiAuthController::class, 'logout']);
 
     // Reseñas
     Route::post('/reviews',        [ReviewController::class, 'store']);
