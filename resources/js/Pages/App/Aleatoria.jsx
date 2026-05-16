@@ -4,13 +4,16 @@ import Sidebar from '../../Components/Sidebar'
 import TopBar from '../../Components/TopBar'
 import styles from './Aleatoria.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
-import { MOCK_PELICULAS, getPeliculaAleatoria } from './Aleatoria.helpers.js'
+import api from '@/lib/axios'
+import ModalResena from '../../Components/ModalResena'
 
 export default function Aleatoria() {
 
-  const [pelicula,    setPelicula]    = useState(null)
-  const [girando,     setGirando]     = useState(false)
-  const [favoritos,   setFavoritos]   = useState([])
+  const [pelicula,            setPelicula]            = useState(null)
+  const [girando,             setGirando]             = useState(false)
+  const [favoritos,           setFavoritos]           = useState([])
+  const [modalResenaAbierto,  setModalResenaAbierto]  = useState(false)
+  const [tieneSeisEstrellas,  setTieneSeisEstrellas]  = useState(false)
   const audioRef = useRef(null)
 
   function toggleFavorito(id) {
@@ -22,20 +25,32 @@ export default function Aleatoria() {
   function lanzarDado() {
     if (girando) return
 
-    // 1. Activa la animación
     setGirando(true)
 
-    // 2. Reproduce el sonido del dado
     if (audioRef.current) {
       audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {})
+      audioRef.current.play().catch(() => { })
     }
 
-    // 3. Después de 800ms (duración de la animación) muestra la película
     setTimeout(() => {
-      setPelicula(getPeliculaAleatoria(MOCK_PELICULAS, pelicula?.id))
-      setGirando(false)
+      api.get('/movies/random')
+        .then(res => setPelicula(res.data))
+        .catch(err => console.error(err))
+        .finally(() => setGirando(false))
     }, 800)
+  }
+
+  function abrirModalResena() {
+    // Antes de abrir el modal verifica si el usuario ya tiene una reseña de 6 estrellas
+    api.get('/my-reviews')
+      .then(res => {
+        setTieneSeisEstrellas(res.data.some(r => r.is_six_star))
+        setModalResenaAbierto(true)
+      })
+      .catch(() => {
+        // Si falla la consulta, abre igual — el backend validará
+        setModalResenaAbierto(true)
+      })
   }
 
   const esFavorita = pelicula ? favoritos.includes(pelicula.id) : false
@@ -58,7 +73,6 @@ export default function Aleatoria() {
 
           <div className={styles.layout}>
 
-            {/* ── Panel del dado ── */}
             <div className={styles.dadoPanel}>
               <button
                 className={`${styles.dadoBtn} ${girando ? styles.dadoGirando : ''}`}
@@ -66,12 +80,9 @@ export default function Aleatoria() {
                 disabled={girando}
                 title="Lanzar dado"
               >
-                {/* SVG del dado — dibujado a mano para poder animarlo */}
                 <svg viewBox="0 0 100 100" className={styles.dadoSvg}>
-                  {/* Cara del dado */}
                   <rect x="8" y="8" width="84" height="84" rx="14" ry="14"
                     fill="#3d1a0a" stroke="#c9a84c" strokeWidth="2.5" />
-                  {/* Puntos — configuración de 5 */}
                   <circle cx="30" cy="30" r="7" fill="#c9a84c" />
                   <circle cx="70" cy="30" r="7" fill="#c9a84c" />
                   <circle cx="50" cy="50" r="7" fill="#c9a84c" />
@@ -87,15 +98,16 @@ export default function Aleatoria() {
               </p>
             </div>
 
-            {/* ── Panel de resultado ── */}
             {pelicula && (
               <div className={styles.resultadoPanel}>
 
-                {/* Poster */}
                 <div className={styles.poster}>
-                  <div className={styles.posterPlaceholder}>🎬</div>
-                  <h2 className={styles.peliculaTitulo}>{pelicula.titulo}</h2>
-                  <p className={styles.peliculaMeta}>{pelicula.anio} · {pelicula.genero}</p>
+                  {pelicula.poster
+                    ? <img src={pelicula.poster} alt={pelicula.title} className={styles.posterImg} />
+                    : <div className={styles.posterPlaceholder}>🎬</div>
+                  }
+                  <h2 className={styles.peliculaTitulo}>{pelicula.title}</h2>
+                  <p className={styles.peliculaMeta}>{pelicula.anio} · {pelicula.genre}</p>
                   <div className={styles.stars}>
                     {Array.from({ length: 5 }).map((_, i) => (
                       <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
@@ -103,11 +115,10 @@ export default function Aleatoria() {
                   </div>
                 </div>
 
-                {/* Sinopsis + acciones */}
                 <div className={styles.sinopsisPanel}>
                   <div className={styles.sinopsisBox}>
                     <h3 className={styles.sinopsisLabel}>Sinópsis</h3>
-                    <p className={styles.sinopsisTexto}>{pelicula.sinopsis}</p>
+                    <p className={styles.sinopsisTexto}>{pelicula.synopsis}</p>
                   </div>
 
                   <div className={styles.acciones}>
@@ -118,7 +129,7 @@ export default function Aleatoria() {
                       {esFavorita ? '♥' : '♡'}
                     </button>
 
-                    <button className={styles.resenaBtn}>
+                    <button className={styles.resenaBtn} onClick={abrirModalResena}>
                       <Plus size={16} />
                       Agregar reseña
                     </button>
@@ -133,9 +144,18 @@ export default function Aleatoria() {
         </main>
       </div>
 
-      {/* Audio del dado — sin controles visibles */}
-      {/* El archivo debe estar en public/sounds/dado.mp3 */}
       <audio ref={audioRef} src="/sounds/dado.mp3" preload="auto" />
+      {modalResenaAbierto && pelicula && (
+        <ModalResena
+          pelicula={pelicula}
+          tieneSeisEstrellas={tieneSeisEstrellas}
+          onCerrar={() => setModalResenaAbierto(false)}
+          onExito={() => {
+            setModalResenaAbierto(false)
+            console.log('Reseña guardada')
+          }}
+        />
+      )}
 
     </div>
   )
