@@ -1,27 +1,29 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react'
 import Sidebar from '../../Components/Sidebar'
 import TopBar from '../../Components/TopBar'
 import styles from './Peliculas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import { scrollCarrusel, dragProps } from './Peliculas.helpers.js'
-
-const MOCK_PELICULAS = [
-  { id: 1, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 4, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.' },
-  { id: 2, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 5, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-  { id: 3, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 3, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-  { id: 4, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 4, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-  { id: 5, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 5, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-  { id: 6, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 4, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-  { id: 7, titulo: 'Título de la película', anio: 2026, genero: 'Género', rating: 3, sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a fermentum orci. Pellentesque blandit lobortis leo, at maximus metus gravida sit amet.' },
-]
+import api from '@/lib/axios'
 
 export default function Peliculas() {
 
+  const [peliculas, setPeliculas] = useState([])
   const [favoritos, setFavoritos] = useState([])
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
+  const [cargando, setCargando] = useState(true)
   const carruselRecientes = useRef(null)
   const carruselValoradas = useRef(null)
+
+  useEffect(() => {
+    api.get('/movies')
+      .then(res => setPeliculas(res.data))
+      .catch(err => console.error(err))
+      .finally(() => setCargando(false))
+  }, [])
+
+  const peliculasValoradas = [...peliculas].sort((a, b) => b.rating - a.rating)
 
   function toggleFavorito(id) {
     setFavoritos(prev =>
@@ -30,6 +32,8 @@ export default function Peliculas() {
         : [...prev, id]
     )
   }
+
+  if (cargando) return <div>Cargando...</div>
 
   return (
     <div className={styles.page}>
@@ -54,7 +58,7 @@ export default function Peliculas() {
                 <ChevronLeft size={18} />
               </button>
               <div className={styles.movieGrid} ref={carruselRecientes} {...dragProps}>
-                {MOCK_PELICULAS.map(pelicula => (
+                {peliculas.map(pelicula => (
                   <MovieCard
                     key={pelicula.id}
                     pelicula={pelicula}
@@ -77,7 +81,7 @@ export default function Peliculas() {
                 <ChevronLeft size={18} />
               </button>
               <div className={styles.movieGrid} ref={carruselValoradas} {...dragProps}>
-                {MOCK_PELICULAS.map(pelicula => (
+                {peliculasValoradas.map(pelicula => (
                   <MovieCard
                     key={pelicula.id}
                     pelicula={pelicula}
@@ -113,11 +117,14 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
   return (
     <div className={styles.movieCard} onClick={onVerDetalle}>
 
-      <div className={styles.posterPlaceholder}>🎬</div>
+     {pelicula.poster
+  ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
+  : <div className={styles.posterPlaceholder}>🎬</div>
+}
 
       <div className={styles.movieInfo}>
-        <div className={styles.movieTitle}>{pelicula.titulo}</div>
-        <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genero}</div>
+        <div className={styles.movieTitle}>{pelicula.title}</div>
+        <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genre}</div>
 
         <div className={styles.movieActions}>
           <div className={styles.stars}>
@@ -155,19 +162,22 @@ function Modal({ pelicula, esFavorita, onToggleFavorito, onCerrar }) {
         </button>
 
         <div className={styles.modalPoster}>
-          <div className={styles.modalPosterPlaceholder}>🎬</div>
+          {pelicula.poster
+  ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
+  : <div className={styles.modalPosterPlaceholder}>🎬</div>
+}
         </div>
 
         <div className={styles.modalInfo}>
 
           <div className={styles.modalSinopsisBox}>
             <h3 className={styles.modalSinopsisLabel}>Sinópsis</h3>
-            <p className={styles.modalSinopsis}>{pelicula.sinopsis}</p>
+            <p className={styles.modalSinopsis}>{pelicula.synopsis}</p>
           </div>
 
           <div className={styles.modalMeta}>
-            <h2 className={styles.modalTitulo}>{pelicula.titulo}</h2>
-            <p className={styles.modalMetaLine}>{pelicula.anio} · {pelicula.genero}</p>
+            <h2 className={styles.modalTitulo}>{pelicula.title}</h2>
+            <p className={styles.modalMetaLine}>{pelicula.anio} · {pelicula.genre}</p>
             <div className={styles.modalStars}>
               {Array.from({ length: 5 }).map((_, i) => (
                 <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
