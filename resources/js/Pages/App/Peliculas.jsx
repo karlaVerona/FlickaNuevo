@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Sidebar from '../../Components/Sidebar'
 import TopBar from '../../Components/TopBar'
+import ModalDetalle from '../../Components/ModalDetalle'
+import ModalResena from '../../Components/ModalResena'
 import styles from './Peliculas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import { scrollCarrusel, dragProps } from './Peliculas.helpers.js'
@@ -9,10 +11,12 @@ import api from '@/lib/axios'
 
 export default function Peliculas() {
 
-  const [peliculas, setPeliculas] = useState([])
-  const [favoritos, setFavoritos] = useState([])
+  const [peliculas,            setPeliculas]            = useState([])
+  const [favoritos,            setFavoritos]            = useState([])
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [cargando, setCargando] = useState(true)
+  const [cargando,             setCargando]             = useState(true)
+  const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
+  const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
   const carruselRecientes = useRef(null)
   const carruselValoradas = useRef(null)
 
@@ -27,10 +31,15 @@ export default function Peliculas() {
 
   function toggleFavorito(id) {
     setFavoritos(prev =>
-      prev.includes(id)
-        ? prev.filter(f => f !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
     )
+  }
+
+  function abrirModalResena() {
+    api.get('/my-reviews')
+      .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
+      .catch(() => {})
+      .finally(() => setModalResenaAbierto(true))
   }
 
   if (cargando) return <div>Cargando...</div>
@@ -42,7 +51,8 @@ export default function Peliculas() {
       <Sidebar active="peliculas" />
 
       <div className={styles.mainColumn}>
-        <TopBar username="Usuario" plan="Flicka PRO" />
+        {/* TopBar ya lee el usuario y plan desde localStorage — sin props */}
+        <TopBar />
 
         <main className={styles.content}>
 
@@ -101,11 +111,24 @@ export default function Peliculas() {
       </div>
 
       {peliculaSeleccionada && (
-        <Modal
+        <ModalDetalle
           pelicula={peliculaSeleccionada}
           esFavorita={favoritos.includes(peliculaSeleccionada.id)}
           onToggleFavorito={toggleFavorito}
           onCerrar={() => setPeliculaSeleccionada(null)}
+          onAbrirResena={abrirModalResena}
+        />
+      )}
+
+      {modalResenaAbierto && peliculaSeleccionada && (
+        <ModalResena
+          pelicula={peliculaSeleccionada}
+          tieneSeisEstrellas={tieneSeisEstrellas}
+          onCerrar={() => setModalResenaAbierto(false)}
+          onExito={() => {
+            setModalResenaAbierto(false)
+            setPeliculaSeleccionada(null)
+          }}
         />
       )}
 
@@ -116,91 +139,28 @@ export default function Peliculas() {
 function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
   return (
     <div className={styles.movieCard} onClick={onVerDetalle}>
-
-     {pelicula.poster
-  ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
-  : <div className={styles.posterPlaceholder}>🎬</div>
-}
-
+      {pelicula.poster
+        ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
+        : <div className={styles.posterPlaceholder}>🎬</div>
+      }
       <div className={styles.movieInfo}>
         <div className={styles.movieTitle}>{pelicula.title}</div>
         <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genre}</div>
-
         <div className={styles.movieActions}>
           <div className={styles.stars}>
             {Array.from({ length: 5 }).map((_, i) => (
               <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
             ))}
           </div>
-
           <button
             className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
-            onClick={e => {
-              e.stopPropagation()
-              onToggleFavorito(pelicula.id)
-            }}
+            onClick={e => { e.stopPropagation(); onToggleFavorito(pelicula.id) }}
             title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
           >
             {esFavorita ? '♥' : '♡'}
           </button>
         </div>
       </div>
-
     </div>
-  )
-}
-
-function Modal({ pelicula, esFavorita, onToggleFavorito, onCerrar }) {
-  return (
-    <>
-      <div className={styles.modalOverlay} onClick={onCerrar} />
-
-      <div className={styles.modal}>
-
-        <button className={styles.modalCerrar} onClick={onCerrar}>
-          <X size={18} />
-        </button>
-
-        <div className={styles.modalPoster}>
-          {pelicula.poster
-  ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
-  : <div className={styles.modalPosterPlaceholder}>🎬</div>
-}
-        </div>
-
-        <div className={styles.modalInfo}>
-
-          <div className={styles.modalSinopsisBox}>
-            <h3 className={styles.modalSinopsisLabel}>Sinópsis</h3>
-            <p className={styles.modalSinopsis}>{pelicula.synopsis}</p>
-          </div>
-
-          <div className={styles.modalMeta}>
-            <h2 className={styles.modalTitulo}>{pelicula.title}</h2>
-            <p className={styles.modalMetaLine}>{pelicula.anio} · {pelicula.genre}</p>
-            <div className={styles.modalStars}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.modalAcciones}>
-            <button
-              className={`${styles.modalFavBtn} ${esFavorita ? styles.modalFavBtnActive : ''}`}
-              onClick={() => onToggleFavorito(pelicula.id)}
-            >
-              {esFavorita ? '♥' : '♡'}
-            </button>
-
-            <button className={styles.modalResenaBtn}>
-              <Plus size={16} />
-              Agregar reseña
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </>
   )
 }

@@ -17,6 +17,10 @@ import logo from '../../images/logo-Flicka.jpeg'
 
 export default function Sidebar({ active = '' }) {
 
+  // Lee el usuario de localStorage para mostrar el badge correcto
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
   function navClass(name) {
     return `${styles.navItem} ${active === name ? styles.navItemActive : ''}`
   }
@@ -29,7 +33,7 @@ export default function Sidebar({ active = '' }) {
         }
       })
     } catch (error) {
-      // Si falla el request igual limpiamos y redirigimos
+      // Si falla igual limpiamos y redirigimos
     } finally {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
@@ -48,8 +52,11 @@ export default function Sidebar({ active = '' }) {
         </span>
       </div>
 
-      {/* Badge PRO */}
-      <div className={styles.planBadge}>PRO</div>
+      {/* Badge dinámico según plan */}
+      {isPro
+        ? <div className={styles.planBadge}>PRO</div>
+        : <div className={styles.planBadgeFree}>GRATUITO</div>
+      }
 
       {/* ── DESCUBRIR ── */}
       <span className={styles.sectionLabel}>Descubrir</span>

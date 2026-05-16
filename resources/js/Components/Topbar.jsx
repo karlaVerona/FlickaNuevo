@@ -1,8 +1,14 @@
 import { Settings, LogOut } from 'lucide-react'
-import { router } from '@inertiajs/react'
+import axios from 'axios'
 import styles from './TopBar.module.css'
 
-export default function TopBar({ username = 'Usuario', plan = 'Gratuito' }) {
+export default function TopBar() {
+
+  // Lee el usuario guardado en localStorage al hacer login/register
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const username = user.username || 'Usuario'
+  const isPro    = user.is_pro === true || user.is_pro === 1
+  const plan     = isPro ? 'Flicka PRO' : 'Gratuito'
 
   function getInitials(name) {
     return name
@@ -22,10 +28,20 @@ export default function TopBar({ username = 'Usuario', plan = 'Gratuito' }) {
     }).toUpperCase()
   }
 
-  function handleLogout() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.post('/logout')
+  async function handleLogout() {
+    try {
+      await axios.post('/api/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+    } catch (error) {
+      // Si falla igual limpiamos y redirigimos
+    } finally {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      window.location.href = '/login'
+    }
   }
 
   return (

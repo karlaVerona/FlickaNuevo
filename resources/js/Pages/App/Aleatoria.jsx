@@ -5,12 +5,15 @@ import TopBar from '../../Components/TopBar'
 import styles from './Aleatoria.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import api from '@/lib/axios'
+import ModalResena from '../../Components/ModalResena'
 
 export default function Aleatoria() {
 
-  const [pelicula,    setPelicula]    = useState(null)
-  const [girando,     setGirando]     = useState(false)
-  const [favoritos,   setFavoritos]   = useState([])
+  const [pelicula,            setPelicula]            = useState(null)
+  const [girando,             setGirando]             = useState(false)
+  const [favoritos,           setFavoritos]           = useState([])
+  const [modalResenaAbierto,  setModalResenaAbierto]  = useState(false)
+  const [tieneSeisEstrellas,  setTieneSeisEstrellas]  = useState(false)
   const audioRef = useRef(null)
 
   function toggleFavorito(id) {
@@ -26,7 +29,7 @@ export default function Aleatoria() {
 
     if (audioRef.current) {
       audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {})
+      audioRef.current.play().catch(() => { })
     }
 
     setTimeout(() => {
@@ -35,6 +38,19 @@ export default function Aleatoria() {
         .catch(err => console.error(err))
         .finally(() => setGirando(false))
     }, 800)
+  }
+
+  function abrirModalResena() {
+    // Antes de abrir el modal verifica si el usuario ya tiene una reseña de 6 estrellas
+    api.get('/my-reviews')
+      .then(res => {
+        setTieneSeisEstrellas(res.data.some(r => r.is_six_star))
+        setModalResenaAbierto(true)
+      })
+      .catch(() => {
+        // Si falla la consulta, abre igual — el backend validará
+        setModalResenaAbierto(true)
+      })
   }
 
   const esFavorita = pelicula ? favoritos.includes(pelicula.id) : false
@@ -113,7 +129,7 @@ export default function Aleatoria() {
                       {esFavorita ? '♥' : '♡'}
                     </button>
 
-                    <button className={styles.resenaBtn}>
+                    <button className={styles.resenaBtn} onClick={abrirModalResena}>
                       <Plus size={16} />
                       Agregar reseña
                     </button>
@@ -129,6 +145,17 @@ export default function Aleatoria() {
       </div>
 
       <audio ref={audioRef} src="/sounds/dado.mp3" preload="auto" />
+      {modalResenaAbierto && pelicula && (
+        <ModalResena
+          pelicula={pelicula}
+          tieneSeisEstrellas={tieneSeisEstrellas}
+          onCerrar={() => setModalResenaAbierto(false)}
+          onExito={() => {
+            setModalResenaAbierto(false)
+            console.log('Reseña guardada')
+          }}
+        />
+      )}
 
     </div>
   )

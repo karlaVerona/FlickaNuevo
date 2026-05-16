@@ -6,25 +6,29 @@ import styles from './Busqueda.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import { GENEROS, ANIOS, ORDENAR } from './Busqueda.helpers.js'
 import api from '@/lib/axios'
+import ModalResena from '../../Components/ModalResena'
+import ModalDetalle from '../../Components/ModalDetalle'
 
 export default function Busqueda() {
 
-  const [busqueda,             setBusqueda]             = useState('')
-  const [filtroGenero,         setFiltroGenero]         = useState(null)
-  const [filtroAnio,           setFiltroAnio]           = useState(null)
-  const [filtroOrden,          setFiltroOrden]          = useState(null)
-  const [dropdownAbierto,      setDropdownAbierto]      = useState(null)
-  const [favoritos,            setFavoritos]            = useState([])
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroGenero, setFiltroGenero] = useState(null)
+  const [filtroAnio, setFiltroAnio] = useState(null)
+  const [filtroOrden, setFiltroOrden] = useState(null)
+  const [dropdownAbierto, setDropdownAbierto] = useState(null)
+  const [favoritos, setFavoritos] = useState([])
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [peliculas,            setPeliculas]            = useState([])
-  const [cargando,             setCargando]             = useState(true)
+  const [peliculas, setPeliculas] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
+  const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
 
   useEffect(() => {
     const params = {}
-    if (busqueda)     params.search   = busqueda
-    if (filtroGenero) params.genre    = filtroGenero
-    if (filtroAnio)   params.anio     = filtroAnio
-    if (filtroOrden)  params.orden    = filtroOrden
+    if (busqueda) params.search = busqueda
+    if (filtroGenero) params.genre = filtroGenero
+    if (filtroAnio) params.anio = filtroAnio
+    if (filtroOrden) params.orden = filtroOrden
 
     setCargando(true)
     api.get('/movies', { params })
@@ -41,6 +45,13 @@ export default function Busqueda() {
 
   function toggleDropdown(nombre) {
     setDropdownAbierto(prev => prev === nombre ? null : nombre)
+  }
+
+  function abrirModalResena() {
+    api.get('/my-reviews')
+      .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
+      .catch(() => { })
+      .finally(() => setModalResenaAbierto(true))
   }
 
   return (
@@ -172,14 +183,14 @@ export default function Busqueda() {
               ? <div>Cargando...</div>
               : peliculas.length > 0
                 ? peliculas.map(pelicula => (
-                    <MovieCard
-                      key={pelicula.id}
-                      pelicula={pelicula}
-                      esFavorita={favoritos.includes(pelicula.id)}
-                      onToggleFavorito={toggleFavorito}
-                      onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
-                    />
-                  ))
+                  <MovieCard
+                    key={pelicula.id}
+                    pelicula={pelicula}
+                    esFavorita={favoritos.includes(pelicula.id)}
+                    onToggleFavorito={toggleFavorito}
+                    onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
+                  />
+                ))
                 : <div className={styles.sinResultados}>No se encontraron películas con esos filtros.</div>
             }
           </div>
@@ -188,11 +199,24 @@ export default function Busqueda() {
       </div>
 
       {peliculaSeleccionada && (
-        <Modal
+        <ModalDetalle
           pelicula={peliculaSeleccionada}
           esFavorita={favoritos.includes(peliculaSeleccionada.id)}
           onToggleFavorito={toggleFavorito}
           onCerrar={() => setPeliculaSeleccionada(null)}
+          onAbrirResena={abrirModalResena}
+        />
+      )}
+
+      {modalResenaAbierto && peliculaSeleccionada && (
+        <ModalResena
+          pelicula={peliculaSeleccionada}
+          tieneSeisEstrellas={tieneSeisEstrellas}
+          onCerrar={() => setModalResenaAbierto(false)}
+          onExito={() => {
+            setModalResenaAbierto(false)
+            setPeliculaSeleccionada(null)
+          }}
         />
       )}
 
@@ -229,7 +253,7 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
   )
 }
 
-function Modal({ pelicula, esFavorita, onToggleFavorito, onCerrar }) {
+function Modal({ pelicula, esFavorita, onToggleFavorito, onCerrar, onAbrirResena }) {
   return (
     <>
       <div className={styles.modalOverlay} onClick={onCerrar} />
@@ -264,7 +288,7 @@ function Modal({ pelicula, esFavorita, onToggleFavorito, onCerrar }) {
             >
               {esFavorita ? '♥' : '♡'}
             </button>
-            <button className={styles.modalResenaBtn}>
+            <button className={styles.modalResenaBtn} onClick={onAbrirResena}>
               <Plus size={16} />
               Agregar reseña
             </button>
