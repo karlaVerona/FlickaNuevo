@@ -1,19 +1,16 @@
 <?php
 
-// app/Http/Controllers/Admin/AdminMovieController.php
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movie;
-use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 
 class AdminMovieController extends Controller
 {
-    // GET /api/admin/movies
     public function index(Request $request)
     {
-        $query = Movie::with('genre');
+        $query = Movie::query();
 
         if ($request->filled('search')) {
             $query->where('title', 'like', "%{$request->search}%");
@@ -22,7 +19,7 @@ class AdminMovieController extends Controller
         if ($request->get('sort') === 'best_rated') {
             $query->orderByDesc('rating');
         } elseif ($request->get('sort') === 'most_viewed') {
-            $query->orderByDesc('views');
+            $query->latest();
         } else {
             $query->latest();
         }
@@ -30,52 +27,45 @@ class AdminMovieController extends Controller
         return response()->json($query->paginate(20));
     }
 
-    // POST /api/admin/movies
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'    => 'required|string|max:255',
-            'director' => 'nullable|string|max:255',
-            'year'     => 'nullable|integer|min:1888|max:2099',
-            'genre_id' => 'nullable|exists:genres,id',
+            'title'    => 'required|string|max:100',
+            'director' => 'required|string|max:50',
+            'anio'     => 'nullable|digits:4|integer',
+            'genre'    => 'nullable|string|max:50',
             'synopsis' => 'nullable|string',
-            'poster'   => 'nullable|url',
+            'poster'   => 'nullable|string|max:255',
         ]);
 
         $movie = Movie::create($data);
-        ActivityLogger::log('created_movie', 'Movie', $movie->id, ['title' => $movie->title]);
 
         return response()->json($movie, 201);
     }
 
-    // GET /api/admin/movies/{movie}
     public function show(Movie $movie)
     {
-        return response()->json($movie->load('genre', 'reviews.user'));
+        return response()->json($movie->load('reviews'));
     }
 
-    // PUT /api/admin/movies/{movie}
     public function update(Request $request, Movie $movie)
     {
         $data = $request->validate([
-            'title'    => 'sometimes|string|max:255',
-            'director' => 'nullable|string|max:255',
-            'year'     => 'nullable|integer|min:1888|max:2099',
-            'genre_id' => 'nullable|exists:genres,id',
+            'title'    => 'sometimes|string|max:100',
+            'director' => 'sometimes|string|max:50',
+            'anio'     => 'nullable|digits:4|integer',
+            'genre'    => 'nullable|string|max:50',
             'synopsis' => 'nullable|string',
-            'poster'   => 'nullable|url',
+            'poster'   => 'nullable|string|max:255',
         ]);
 
         $movie->update($data);
-        ActivityLogger::log('updated_movie', 'Movie', $movie->id, $data);
 
         return response()->json($movie);
     }
 
-    // DELETE /api/admin/movies/{movie}
     public function destroy(Movie $movie)
     {
-        ActivityLogger::log('deleted_movie', 'Movie', $movie->id, ['title' => $movie->title]);
         $movie->delete();
 
         return response()->json(['message' => 'Película eliminada.']);

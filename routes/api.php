@@ -22,17 +22,12 @@ use App\Http\Controllers\Admin\AdminStatsController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminMovieController;
 use App\Http\Controllers\Admin\AdminReviewController;
-use App\Http\Controllers\Admin\AdminReportController;
-use App\Http\Controllers\Admin\GenreController;
-use App\Http\Controllers\Admin\ActivityLogController;
 
 // ─────────────────────────────────────────────
 // PÚBLICAS
 // ─────────────────────────────────────────────
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/login',    [ApiAuthController::class, 'login']);
-
-Route::get('/genres', [GenreController::class, 'index']);
 
 // ─────────────────────────────────────────────
 // USUARIO AUTENTICADO
@@ -89,20 +84,9 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/users/{user}',           [AdminUserController::class, 'show']);
     Route::put('/users/{user}',           [AdminUserController::class, 'update']);
     Route::delete('/users/{user}',        [AdminUserController::class, 'destroy']);
-    Route::post('/users/{user}/suspend',  [AdminUserController::class, 'suspend']);
-    Route::post('/users/{user}/activate', [AdminUserController::class, 'activate']);
 
     Route::apiResource('/movies', AdminMovieController::class);
 
-    Route::get('/reviews',             [AdminReviewController::class, 'index']);
-    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy']);
-    Route::post('/reviews/{review}/hide', [AdminReviewController::class, 'hide']);
-
-    Route::get('/reports',                   [AdminReportController::class, 'index']);
-    Route::post('/reports/{report}/resolve', [AdminReportController::class, 'resolve']);
-    Route::post('/reports/{report}/dismiss', [AdminReportController::class, 'dismiss']);
-
-    Route::apiResource('/genres', GenreController::class)->except(['index']);
-
-    Route::get('/activity', [ActivityLogController::class, 'index']);
+    Route::get('/reviews',                [AdminReviewController::class, 'index']);
+    Route::delete('/reviews/{review}',    [AdminReviewController::class, 'destroy']);
 });

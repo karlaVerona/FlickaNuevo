@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     {
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
+            'status'           => session('status'),
         ]);
     }
 
@@ -33,14 +33,13 @@ class AuthenticatedSessionController extends Controller
         // Mantiene la sesión segura para frontend
         $request->session()->regenerate();
 
-        // Token API para backend/Sanctum
-        $user = Auth::user();
-
+        // Token API para Sanctum
+        $user  = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
-            'user' => $user,
+            'user'  => $user,
         ]);
     }
 
@@ -49,19 +48,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        // Elimina token Sanctum si existe
-        if ($request->user()?->currentAccessToken()) {
-            $request->user()->currentAccessToken()->delete();
+        // ── Petición API (axios con token) ──────────────────
+        if ($request->expectsJson()) {
+            if ($request->user()?->currentAccessToken()) {
+                $request->user()->currentAccessToken()->delete();
+            }
+
+            return response()->json([
+                'message' => 'Sesión cerrada correctamente.'
+            ]);
         }
 
-        // Cierra sesión web
+        // ── Petición web (Inertia) ───────────────────────────
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json([
-            'message' => 'Sesión cerrada correctamente.'
-        ]);
+        return redirect('/login');
     }
 }

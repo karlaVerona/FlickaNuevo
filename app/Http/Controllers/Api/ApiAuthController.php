@@ -9,11 +9,12 @@ use Illuminate\Validation\ValidationException;
 
 class ApiAuthController extends Controller
 {
+    // POST /api/login
     public function login(Request $request)
     {
         $request->validate([
             'email'    => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -31,9 +32,13 @@ class ApiAuthController extends Controller
         ]);
     }
 
+    // POST /api/logout
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Sesión cerrada correctamente.']);
+
+        return response()->json([
+            'message' => 'Sesión cerrada correctamente.'
+        ]);
     }
 }

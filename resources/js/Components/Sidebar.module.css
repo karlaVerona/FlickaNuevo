@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500&display=swap');
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 210px;
+  min-width: 210px;
+  min-height: 100vh;
+  background: #1e0b0b;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* ── LOGO ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.25rem 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.logoImg {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.logoText {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.logoText span {
+  color: #ae8c5f;
+  font-style: italic;
+}
+
+/* ── PRO BADGE ── */
+.planBadge {
+  margin: 0 1.25rem 1.5rem;
+  padding: 0.4rem 0;
+  text-align: center;
+  background: linear-gradient(135deg, #c9a84c, #ae8c5f);
+  border-radius: 8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+/* ── SECTION LABELS ── */
+.sectionLabel {
+  padding: 0 1.25rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ae8c5f;
+  margin-top: 0.5rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── NAV ITEMS ── */
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  background: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+}
+
+.navItem:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+  border-left-color: rgba(201,168,76,0.4);
+}
+
+.navItemActive {
+  color: #fff;
+  background: rgba(139,26,26,0.35);
+  border-left-color: #c9a84c;
+  font-weight: bold;
+}
+
+/* ── ICONO ──
+   Los SVG de Lucide heredan `color` del padre (.navItem).
+   Cambian solos en hover y active sin necesitar reglas extra.
+*/
+.navIcon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: #ae8c5f52;
+  margin: 0.75rem 1.25rem;
+}
+
+/* ── FREE BADGE ── */
+.planBadgeFree {
+  margin: 0 1.25rem 1.5rem;
+  padding: 0.4rem 0;
+  text-align: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+}

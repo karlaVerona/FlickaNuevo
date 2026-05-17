@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { router } from '@inertiajs/react'
 import api from '@/lib/axios'
 import styles from './Login.module.css'
-
+import logo from '../../../images/logo-Flicka.jpeg';
+import fondo from '../../../images/fondo-login.jpg';
 export default function Login() {
   const [data, setData] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
@@ -23,7 +24,7 @@ export default function Login() {
       })
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
-      router.visit('/catalogo')
+     window.location.href = '/peliculas'
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors)
@@ -38,8 +39,8 @@ export default function Login() {
   return (
     <div className={styles.page}>
 
-      {/* ── PANEL IZQUIERDO (65%) ── */}
       <div className={styles.leftPanel}>
+        <img src={fondo} alt="" className={styles.bgImage} />
 
         <svg className={styles.arcs} viewBox="0 0 520 520">
           <circle cx="520" cy="0" r="140" fill="none" stroke="#fff" strokeWidth="1.5" />
@@ -49,7 +50,9 @@ export default function Login() {
           <circle cx="520" cy="0" r="420" fill="none" stroke="#fff" strokeWidth="1.5" />
         </svg>
 
-        <div className={styles.leftLogo}>Flicka</div>
+        <div className={styles.leftLogo}>
+          <img src={logo} alt="Flicka" />
+        </div>
 
         <div className={styles.leftContent}>
           <h1 className={styles.headline}>
@@ -73,7 +76,6 @@ export default function Login() {
 
       </div>
 
-      {/* ── PANEL DERECHO (35%) ── */}
       <div className={styles.rightPanel}>
 
         <div className={styles.brand}>
@@ -131,7 +133,7 @@ export default function Login() {
             className={styles.btnSecondary}
             onClick={() => router.visit('/admin/login')}
           >
-            🎬 Soy director
+            Soy director
           </button>
         </form>
 

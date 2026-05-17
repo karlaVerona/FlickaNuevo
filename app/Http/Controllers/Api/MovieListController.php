@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class MovieListController extends Controller
 {
-    // Ver todas mis listas
+    // Ver todas mis listas con sus películas
     public function index(Request $request)
     {
         $lists = MovieList::where('user_id', $request->user()->id)
@@ -18,7 +18,7 @@ class MovieListController extends Controller
         return response()->json($lists);
     }
 
-    // Crear lista
+    // Crear lista nueva
     public function store(Request $request)
     {
         $request->validate([
