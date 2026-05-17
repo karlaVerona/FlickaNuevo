@@ -1,77 +1,50 @@
 import { useState, useEffect } from 'react'
-import { Search, ChevronDown, X } from 'lucide-react'
+import { ChevronDown, Heart, Search, X } from 'lucide-react'
 import Sidebar from '../../Components/Sidebar'
 import TopBar from '../../Components/TopBar'
-import styles from './Busqueda.module.css'
+import styles from './Favoritas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
-import { GENEROS, ANIOS, ORDENAR } from './Busqueda.helpers.js'
 import api from '@/lib/axios'
-import ModalResena from '../../Components/ModalResena'
 import ModalDetalle from '../../Components/ModalDetalle'
+import ModalResena from '../../Components/ModalResena'
 
-export default function Busqueda() {
+const GENEROS = ['Terror', 'Romance', 'Ficción', 'Drama', 'Acción', 'Comedia']
+const ORDENAR = ['Más reciente', 'Más antigua', 'A–Z', 'Z–A']
 
+export default function Favoritas() {
+
+  const [favoritas,            setFavoritas]            = useState([])
+  const [cargando,             setCargando]             = useState(true)
   const [busqueda,             setBusqueda]             = useState('')
   const [filtroGenero,         setFiltroGenero]         = useState(null)
-  const [filtroAnio,           setFiltroAnio]           = useState(null)
   const [filtroOrden,          setFiltroOrden]          = useState(null)
   const [dropdownAbierto,      setDropdownAbierto]      = useState(null)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [peliculas,            setPeliculas]            = useState([])
-  const [cargando,             setCargando]             = useState(true)
   const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
   const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
-  const [favIds,               setFavIds]               = useState(new Set())
-  const [favMap,               setFavMap]               = useState({})
 
   useEffect(() => {
-    // Carga favoritas al montar
-    api.get('/favorites')
-      .then(res => {
-        const ids = new Set(res.data.favorites.map(f => f.movie_id))
-        const map = {}
-        res.data.favorites.forEach(f => { map[f.movie_id] = f.id })
-        setFavIds(ids)
-        setFavMap(map)
-      })
-      .catch(() => {})
+    cargarFavoritas()
   }, [])
 
-  useEffect(() => {
-    const params = {}
-    if (busqueda)     params.search = busqueda
-    if (filtroGenero) params.genre  = filtroGenero
-    if (filtroAnio)   params.anio   = filtroAnio
-    if (filtroOrden)  params.orden  = filtroOrden
-
+  function cargarFavoritas() {
     setCargando(true)
-    api.get('/movies', { params })
-      .then(res => setPeliculas(res.data))
+    api.get('/favorites')
+      .then(res => setFavoritas(res.data.favorites))
       .catch(err => console.error(err))
       .finally(() => setCargando(false))
-  }, [busqueda, filtroGenero, filtroAnio, filtroOrden])
+  }
 
   function toggleDropdown(nombre) {
     setDropdownAbierto(prev => prev === nombre ? null : nombre)
   }
 
-  function toggleFavorito(movieId) {
-    if (favIds.has(movieId)) {
-      const favId = favMap[movieId]
-      api.delete(`/favorites/${favId}`)
-        .then(() => {
-          setFavIds(prev => { const s = new Set(prev); s.delete(movieId); return s })
-          setFavMap(prev => { const m = { ...prev }; delete m[movieId]; return m })
-        })
-        .catch(err => console.error(err))
-    } else {
-      api.post('/favorites', { movie_id: movieId })
-        .then(res => {
-          setFavIds(prev => new Set(prev).add(movieId))
-          setFavMap(prev => ({ ...prev, [movieId]: res.data.favorite.id }))
-        })
-        .catch(err => console.error(err))
-    }
+  function quitarFavorita(movieId) {
+    const fav = favoritas.find(f => f.movie_id === movieId)
+    if (!fav) return
+    api.delete(`/favorites/${fav.id}`)
+      .then(() => setFavoritas(prev => prev.filter(f => f.id !== fav.id)))
+      .catch(err => console.error(err))
   }
 
   function abrirModalResena() {
@@ -81,11 +54,25 @@ export default function Busqueda() {
       .finally(() => setModalResenaAbierto(true))
   }
 
+  const favoritasFiltradas = [...favoritas]
+    .filter(f => {
+      const coincideTitulo = (f.movie?.title ?? '').toLowerCase().includes(busqueda.toLowerCase())
+      const coincideGenero = filtroGenero ? f.movie?.genre === filtroGenero : true
+      return coincideTitulo && coincideGenero
+    })
+    .sort((a, b) => {
+      if (filtroOrden === 'Más reciente') return b.id - a.id
+      if (filtroOrden === 'Más antigua')  return a.id - b.id
+      if (filtroOrden === 'A–Z') return (a.movie?.title ?? '').localeCompare(b.movie?.title ?? '')
+      if (filtroOrden === 'Z–A') return (b.movie?.title ?? '').localeCompare(a.movie?.title ?? '')
+      return 0
+    })
+
   return (
     <div className={styles.page}>
 
       <img src={fondo} alt="" className={styles.bgImage} />
-      <Sidebar active="busqueda" />
+      <Sidebar active="favoritas" />
 
       <div className={styles.mainColumn}>
         <TopBar username="Usuario" plan="Flicka PRO" />
@@ -93,11 +80,13 @@ export default function Busqueda() {
         <main className={styles.content}>
 
           <div className={styles.pageHeader}>
-            <h1 className={styles.pageTitle}>Busca en nuestro catálogo</h1>
-            <p className={styles.pageSubtitle}>Descubre una nueva historia</p>
+            <h1 className={styles.pageTitle}>Favoritas</h1>
+            <p className={styles.pageSubtitle}>Las películas que más te gustaron</p>
           </div>
 
-          <div className={styles.searchRow}>
+          {/* ── Búsqueda + filtros en la misma fila ── */}
+          <div className={styles.controlesRow}>
+
             <div className={styles.searchBox}>
               <Search size={16} className={styles.searchIcon} />
               <input
@@ -114,7 +103,7 @@ export default function Busqueda() {
               )}
             </div>
 
-            <div className={styles.filtros}>
+            <div className={styles.filtrosRow}>
               <span className={styles.filtrosLabel}>Filtrar por:</span>
 
               <div className={styles.dropdown}>
@@ -144,35 +133,10 @@ export default function Busqueda() {
 
               <div className={styles.dropdown}>
                 <button
-                  className={`${styles.dropdownBtn} ${filtroAnio ? styles.dropdownBtnActivo : ''}`}
-                  onClick={() => toggleDropdown('anio')}
-                >
-                  {filtroAnio ?? 'Año'} <ChevronDown size={14} />
-                </button>
-                {dropdownAbierto === 'anio' && (
-                  <div className={styles.dropdownMenu}>
-                    {ANIOS.map(a => (
-                      <button key={a}
-                        className={`${styles.dropdownItem} ${filtroAnio === a ? styles.dropdownItemActivo : ''}`}
-                        onClick={() => { setFiltroAnio(a); setDropdownAbierto(null) }}
-                      >{a}</button>
-                    ))}
-                    {filtroAnio && (
-                      <button className={styles.dropdownLimpiar}
-                        onClick={() => { setFiltroAnio(null); setDropdownAbierto(null) }}>
-                        Limpiar
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className={styles.dropdown}>
-                <button
                   className={`${styles.dropdownBtn} ${filtroOrden ? styles.dropdownBtnActivo : ''}`}
                   onClick={() => toggleDropdown('orden')}
                 >
-                  {filtroOrden ?? 'Valoración'} <ChevronDown size={14} />
+                  {filtroOrden ?? 'Ordenar'} <ChevronDown size={14} />
                 </button>
                 {dropdownAbierto === 'orden' && (
                   <div className={styles.dropdownMenu}>
@@ -191,25 +155,41 @@ export default function Busqueda() {
                   </div>
                 )}
               </div>
+
+              <span className={styles.contador}>
+                {favoritasFiltradas.length} película{favoritasFiltradas.length !== 1 ? 's' : ''}
+              </span>
             </div>
+
           </div>
 
-          <div className={styles.resultsGrid}>
-            {cargando
-              ? <div>Cargando...</div>
-              : peliculas.length > 0
-                ? peliculas.map(pelicula => (
+          {/* ── Grid ── */}
+          {cargando
+            ? <div className={styles.cargando}>Cargando favoritas...</div>
+            : favoritasFiltradas.length > 0
+              ? (
+                <div className={styles.grid}>
+                  {favoritasFiltradas.map(fav => (
                     <MovieCard
-                      key={pelicula.id}
-                      pelicula={pelicula}
-                      esFavorita={favIds.has(pelicula.id)}
-                      onToggleFavorito={() => toggleFavorito(pelicula.id)}
-                      onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
+                      key={fav.id}
+                      pelicula={fav.movie}
+                      onVerDetalle={() => setPeliculaSeleccionada(fav.movie)}
+                      onQuitarFavorita={() => quitarFavorita(fav.movie_id)}
                     />
-                  ))
-                : <div className={styles.sinResultados}>No se encontraron películas con esos filtros.</div>
-            }
-          </div>
+                  ))}
+                </div>
+              )
+              : (
+                <div className={styles.vacio}>
+                  <Heart size={48} className={styles.vacioIcono} />
+                  <p className={styles.vacioTexto}>
+                    {busqueda || filtroGenero
+                      ? 'No se encontraron favoritas con esos filtros'
+                      : 'Aún no tienes películas favoritas'}
+                  </p>
+                </div>
+              )
+          }
 
         </main>
       </div>
@@ -217,8 +197,11 @@ export default function Busqueda() {
       {peliculaSeleccionada && (
         <ModalDetalle
           pelicula={peliculaSeleccionada}
-          esFavorita={favIds.has(peliculaSeleccionada.id)}
-          onToggleFavorito={() => toggleFavorito(peliculaSeleccionada.id)}
+          esFavorita={true}
+          onToggleFavorito={() => {
+            quitarFavorita(peliculaSeleccionada.id)
+            setPeliculaSeleccionada(null)
+          }}
           onCerrar={() => setPeliculaSeleccionada(null)}
           onAbrirResena={abrirModalResena}
         />
@@ -240,28 +223,28 @@ export default function Busqueda() {
   )
 }
 
-function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
+function MovieCard({ pelicula, onVerDetalle, onQuitarFavorita }) {
   return (
-    <div className={styles.movieCard} onClick={onVerDetalle}>
-      {pelicula.poster
-        ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
+    <div className={styles.card} onClick={onVerDetalle}>
+      {pelicula?.poster
+        ? <img src={pelicula.poster} alt={pelicula.title} className={styles.poster} />
         : <div className={styles.posterPlaceholder} />
       }
-      <div className={styles.movieInfo}>
-        <div className={styles.movieTitle}>{pelicula.title}</div>
-        <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genre}</div>
-        <div className={styles.movieActions}>
+      <div className={styles.cardInfo}>
+        <div className={styles.cardTitulo}>{pelicula?.title}</div>
+        <div className={styles.cardMeta}>{pelicula?.anio} · {pelicula?.genre}</div>
+        <div className={styles.cardAcciones}>
           <div className={styles.stars}>
             {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
+              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
             ))}
           </div>
           <button
-            className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
-            onClick={e => { e.stopPropagation(); onToggleFavorito() }}
-            title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
+            className={styles.quitarBtn}
+            onClick={e => { e.stopPropagation(); onQuitarFavorita() }}
+            title="Quitar de favoritas"
           >
-            {esFavorita ? '♥' : '♡'}
+            <Heart size={16} fill="currentColor" />
           </button>
         </div>
       </div>

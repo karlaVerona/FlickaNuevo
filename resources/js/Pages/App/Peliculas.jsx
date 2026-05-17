@@ -12,11 +12,14 @@ import api from '@/lib/axios'
 export default function Peliculas() {
 
   const [peliculas,            setPeliculas]            = useState([])
-  const [favoritos,            setFavoritos]            = useState([])
-  const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
   const [cargando,             setCargando]             = useState(true)
+  const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
   const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
   const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
+  // Set de movie_ids que el usuario tiene en favoritas
+  const [favIds,               setFavIds]               = useState(new Set())
+  // Mapa de movie_id → favorite.id (para poder hacer DELETE)
+  const [favMap,               setFavMap]               = useState({})
   const carruselRecientes = useRef(null)
   const carruselValoradas = useRef(null)
 
@@ -25,14 +28,38 @@ export default function Peliculas() {
       .then(res => setPeliculas(res.data))
       .catch(err => console.error(err))
       .finally(() => setCargando(false))
+
+    // Carga favoritas al montar para marcar los corazones correctamente
+    api.get('/favorites')
+      .then(res => {
+        const ids = new Set(res.data.favorites.map(f => f.movie_id))
+        const map = {}
+        res.data.favorites.forEach(f => { map[f.movie_id] = f.id })
+        setFavIds(ids)
+        setFavMap(map)
+      })
+      .catch(() => {})
   }, [])
 
   const peliculasValoradas = [...peliculas].sort((a, b) => b.rating - a.rating)
 
-  function toggleFavorito(id) {
-    setFavoritos(prev =>
-      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
-    )
+  function toggleFavorito(movieId) {
+    if (favIds.has(movieId)) {
+      const favId = favMap[movieId]
+      api.delete(`/favorites/${favId}`)
+        .then(() => {
+          setFavIds(prev => { const s = new Set(prev); s.delete(movieId); return s })
+          setFavMap(prev => { const m = { ...prev }; delete m[movieId]; return m })
+        })
+        .catch(err => console.error(err))
+    } else {
+      api.post('/favorites', { movie_id: movieId })
+        .then(res => {
+          setFavIds(prev => new Set(prev).add(movieId))
+          setFavMap(prev => ({ ...prev, [movieId]: res.data.favorite.id }))
+        })
+        .catch(err => console.error(err))
+    }
   }
 
   function abrirModalResena() {
@@ -51,7 +78,11 @@ export default function Peliculas() {
       <Sidebar active="peliculas" />
 
       <div className={styles.mainColumn}>
+<<<<<<< Updated upstream
         <TopBar username="Usuario" plan="Flicka PRO" />
+=======
+        <TopBar />
+>>>>>>> Stashed changes
 
         <main className={styles.content}>
 
@@ -71,8 +102,8 @@ export default function Peliculas() {
                   <MovieCard
                     key={pelicula.id}
                     pelicula={pelicula}
-                    esFavorita={favoritos.includes(pelicula.id)}
-                    onToggleFavorito={toggleFavorito}
+                    esFavorita={favIds.has(pelicula.id)}
+                    onToggleFavorito={() => toggleFavorito(pelicula.id)}
                     onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
                   />
                 ))}
@@ -94,8 +125,8 @@ export default function Peliculas() {
                   <MovieCard
                     key={pelicula.id}
                     pelicula={pelicula}
-                    esFavorita={favoritos.includes(pelicula.id)}
-                    onToggleFavorito={toggleFavorito}
+                    esFavorita={favIds.has(pelicula.id)}
+                    onToggleFavorito={() => toggleFavorito(pelicula.id)}
                     onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
                   />
                 ))}
@@ -113,8 +144,8 @@ export default function Peliculas() {
       {peliculaSeleccionada && (
         <ModalDetalle
           pelicula={peliculaSeleccionada}
-          esFavorita={favoritos.includes(peliculaSeleccionada.id)}
-          onToggleFavorito={toggleFavorito}
+          esFavorita={favIds.has(peliculaSeleccionada.id)}
+          onToggleFavorito={() => toggleFavorito(peliculaSeleccionada.id)}
           onCerrar={() => setPeliculaSeleccionada(null)}
           onAbrirResena={abrirModalResena}
         />
@@ -142,7 +173,7 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
     <div className={styles.movieCard} onClick={onVerDetalle}>
       {pelicula.poster
         ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
-        : <div className={styles.posterPlaceholder}>🎬</div>
+        : <div className={styles.posterPlaceholder} />
       }
       <div className={styles.movieInfo}>
         <div className={styles.movieTitle}>{pelicula.title}</div>
@@ -155,7 +186,7 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
           </div>
           <button
             className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
-            onClick={e => { e.stopPropagation(); onToggleFavorito(pelicula.id) }}
+            onClick={e => { e.stopPropagation(); onToggleFavorito() }}
             title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
           >
             {esFavorita ? '♥' : '♡'}

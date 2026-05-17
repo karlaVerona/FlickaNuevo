@@ -36,4 +36,37 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+<<<<<<< Updated upstream
 require __DIR__.'/auth.php';
+=======
+require __DIR__.'/auth.php';
+
+
+
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login');
+})->name('login');
+Route::get('/peliculas', function () {
+    return Inertia::render('App/Peliculas');
+});
+
+Route::get('/busqueda', function () {
+    return Inertia::render('App/Busqueda');
+});
+
+Route::get('/aleatoria', function () {
+    return Inertia::render('App/Aleatoria');
+});
+
+Route::get('/mis-resenas', function () {
+    return Inertia::render('App/MisResenas');
+})->name('mis-resenas');
+
+
+Route::get('/favoritas', fn() => Inertia::render('App/Favoritas'))->name('favoritas');
+
+Route::get('/register', function () {
+    return Inertia::render('Auth/Register');
+})->name('register');
+
+>>>>>>> Stashed changes
