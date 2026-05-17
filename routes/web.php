@@ -14,33 +14,20 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/peliculas',     fn() => Inertia::render('App/Peliculas'))->name('peliculas');
+    Route::get('/busqueda',      fn() => Inertia::render('App/Busqueda'))->name('busqueda');
+    Route::get('/aleatoria',     fn() => Inertia::render('App/Aleatoria'))->name('aleatoria');
+    Route::get('/mis-resenas',   fn() => Inertia::render('App/MisResenas'))->name('mis-resenas');
+    Route::get('/mis-listas',    fn() => Inertia::render('App/MisListas'))->name('mis-listas');
+    Route::get('/favoritas',     fn() => Inertia::render('App/Favoritas'))->name('favoritas');
+    Route::get('/perfil',        fn() => Inertia::render('App/Perfil'))->name('perfil');
+    Route::get('/estadisticas',  fn() => Inertia::render('App/Estadisticas'))->name('estadisticas');
+    Route::get('/suscripcion',   fn() => Inertia::render('App/Suscripcion'))->name('suscripcion');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
-
-
-
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login');
-})->name('login');
-Route::get('/peliculas', function () {
-    return Inertia::render('App/Peliculas');
-});
-
-Route::get('/busqueda', function () {
-    return Inertia::render('App/Busqueda');
-});
-
-Route::get('/aleatoria', function () {
-    return Inertia::render('App/Aleatoria');
-});Route::get('/register', function () {
-    return Inertia::render('Auth/Register');
-})->name('register');
