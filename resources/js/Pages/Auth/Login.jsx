@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
-import api from '@/lib/axios'
+import axios from 'axios'
 import styles from './Login.module.css'
 import logo from '../../../images/logo-Flicka.jpeg';
 import fondo from '../../../images/fondo-login.jpg';
@@ -18,13 +18,13 @@ export default function Login() {
     setProcessing(true)
     setErrors({})
     try {
-      const response = await api.post('/login', {
+      const response = await axios.post('/api/login', {
         email: data.email,
         password: data.password,
       })
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
-     window.location.href = '/peliculas'
+      router.visit('/catalogo')
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors)

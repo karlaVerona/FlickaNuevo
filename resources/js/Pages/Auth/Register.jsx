@@ -1,57 +1,31 @@
-import { useState } from 'react'
-import { router } from '@inertiajs/react'
-import axios from 'axios'
+import { useForm } from '@inertiajs/react'
 import styles from './Register.module.css'
 import fondo from '../../../images/fondo-login.jpg'
 
 export default function Register() {
 
-  const [data, setData] = useState({
-    username: '',
+  const { data, setData, post, processing, errors } = useForm({
+    name: '',
     email: '',
     password: '',
-    password_confirmation: '',
+    password_confirmation: '',  
   })
-  const [errors, setErrors] = useState({})
-  const [processing, setProcessing] = useState(false)
 
-  function handleChange(e) {
-    setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
-
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault()
-    setProcessing(true)
-    setErrors({})
-
-    try {
-      const response = await axios.post('/api/register', {
-        username:              data.username,
-        email:                 data.email,
-        password:              data.password,
-        password_confirmation: data.password_confirmation,
-      })
-
-      localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-      window.location.href = '/peliculas'
-
-    } catch (error) {
-      if (error.response?.status === 422) {
-        setErrors(error.response.data.errors)
-      } else {
-        setErrors({ email: 'Ocurrió un error. Intenta de nuevo.' })
-      }
-    } finally {
-      setProcessing(false)
-    }
+    // Hace POST a /register — que es la ruta que apunta a RegisteredUserController@store
+    post('/register')
   }
 
   return (
     <div className={styles.page}>
 
+      {/* Imagen de fondo al 100% */}
       <img src={fondo} alt="" className={styles.bgImage} />
 
+      {/* Overlay oscuro para legibilidad */}
+
+      {/* Panel central: 30% ancho, 80vh alto */}
       <div className={styles.panel}>
 
         <div className={styles.brand}>
@@ -67,22 +41,24 @@ export default function Register() {
 
         <form onSubmit={handleSubmit}>
 
+          
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Nombre de usuario</label>
             <input
               className={styles.fieldInput}
               type="text"
-              name="username"
-              value={data.username}
-              onChange={handleChange}
+              name="name"
+              value={data.name}
+              onChange={e => setData('name', e.target.value)}
               placeholder="ej. cinefilop99"
               autoComplete="username"
             />
-            {errors.username && (
-              <span className={styles.fieldError}>{errors.username}</span>
+            {errors.name && (
+              <span className={styles.fieldError}>{errors.name}</span>
             )}
           </div>
 
+          
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Correo electrónico</label>
             <input
@@ -90,7 +66,7 @@ export default function Register() {
               type="email"
               name="email"
               value={data.email}
-              onChange={handleChange}
+              onChange={e => setData('email', e.target.value)}
               placeholder="tu@correo.com"
               autoComplete="email"
             />
@@ -106,7 +82,7 @@ export default function Register() {
               type="password"
               name="password"
               value={data.password}
-              onChange={handleChange}
+              onChange={e => setData('password', e.target.value)}
               placeholder="Mínimo 8 caracteres"
               autoComplete="new-password"
             />
@@ -122,7 +98,7 @@ export default function Register() {
               type="password"
               name="password_confirmation"
               value={data.password_confirmation}
-              onChange={handleChange}
+              onChange={e => setData('password_confirmation', e.target.value)}
               placeholder="Repite tu contraseña"
               autoComplete="new-password"
             />

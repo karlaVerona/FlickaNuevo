@@ -9,30 +9,64 @@ import fondo from '../../../images/fondo-paginas2.jpg'
 import { scrollCarrusel, dragProps } from './Peliculas.helpers.js'
 import api from '@/lib/axios'
 
+const SECCIONES = [
+  { key: 'recientes', titulo: '🎬 Agregadas recientemente' },
+  { key: 'valoradas', titulo: '🏆 Las mejor valoradas' },
+  { key: 'familia',   titulo: '👨‍👩‍👧 Modo familia activado' },
+  { key: 'comedia',   titulo: '🎪 Noche de carcajadas' },
+  { key: 'terror',    titulo: '😭 Las de terror...' },
+  { key: 'romantica', titulo: '❤️ Mariposas en el estómago' },
+  { key: 'miedo',     titulo: '😱 Si te atreves...' },
+  { key: 'scifi',     titulo: '🚀 Fuera de este mundo' },
+  { key: 'musical',   titulo: '🎵 A todo volumen' },
+  { key: 'drama',     titulo: '🥀 Grandes historias' },
+  { key: 'accion',    titulo: '⚡ Al filo del asiento' },
+]
+
 export default function Peliculas() {
 
-  const [peliculas,            setPeliculas]            = useState([])
-  const [favoritos,            setFavoritos]            = useState([])
-  const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
+  const [secciones,            setSecciones]            = useState({})
   const [cargando,             setCargando]             = useState(true)
+  const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
   const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
   const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
-  const carruselRecientes = useRef(null)
-  const carruselValoradas = useRef(null)
+  const [favIds,               setFavIds]               = useState(new Set())
+  const [favMap,               setFavMap]               = useState({})
 
   useEffect(() => {
-    api.get('/movies')
-      .then(res => setPeliculas(res.data))
+    Promise.all([
+      api.get('/movies/sections'),
+      api.get('/favorites'),
+    ])
+      .then(([secRes, favRes]) => {
+        setSecciones(secRes.data)
+        const ids = new Set(favRes.data.favorites.map(f => f.movie_id))
+        const map = {}
+        favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
+        setFavIds(ids)
+        setFavMap(map)
+      })
       .catch(err => console.error(err))
       .finally(() => setCargando(false))
   }, [])
 
-  const peliculasValoradas = [...peliculas].sort((a, b) => b.rating - a.rating)
-
-  function toggleFavorito(id) {
-    setFavoritos(prev =>
-      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
-    )
+  function toggleFavorito(movieId) {
+    if (favIds.has(movieId)) {
+      const favId = favMap[movieId]
+      api.delete(`/favorites/${favId}`)
+        .then(() => {
+          setFavIds(prev => { const s = new Set(prev); s.delete(movieId); return s })
+          setFavMap(prev => { const m = { ...prev }; delete m[movieId]; return m })
+        })
+        .catch(err => console.error(err))
+    } else {
+      api.post('/favorites', { movie_id: movieId })
+        .then(res => {
+          setFavIds(prev => new Set(prev).add(movieId))
+          setFavMap(prev => ({ ...prev, [movieId]: res.data.favorite.id }))
+        })
+        .catch(err => console.error(err))
+    }
   }
 
   function abrirModalResena() {
@@ -51,7 +85,6 @@ export default function Peliculas() {
       <Sidebar active="peliculas" />
 
       <div className={styles.mainColumn}>
-        {/* TopBar ya lee el usuario y plan desde localStorage — sin props */}
         <TopBar />
 
         <main className={styles.content}>
@@ -61,51 +94,20 @@ export default function Peliculas() {
             <p className={styles.pageSubtitle}>Descubre una nueva historia</p>
           </div>
 
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Agregadas recientemente</h2>
-            <div className={styles.carruselWrapper}>
-              <button className={styles.flechaIzquierda} onClick={() => scrollCarrusel(carruselRecientes, 'izquierda')}>
-                <ChevronLeft size={18} />
-              </button>
-              <div className={styles.movieGrid} ref={carruselRecientes} {...dragProps}>
-                {peliculas.map(pelicula => (
-                  <MovieCard
-                    key={pelicula.id}
-                    pelicula={pelicula}
-                    esFavorita={favoritos.includes(pelicula.id)}
-                    onToggleFavorito={toggleFavorito}
-                    onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
-                  />
-                ))}
-              </div>
-              <button className={styles.flechaDerecha} onClick={() => scrollCarrusel(carruselRecientes, 'derecha')}>
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Las mejores valoradas</h2>
-            <div className={styles.carruselWrapper}>
-              <button className={styles.flechaIzquierda} onClick={() => scrollCarrusel(carruselValoradas, 'izquierda')}>
-                <ChevronLeft size={18} />
-              </button>
-              <div className={styles.movieGrid} ref={carruselValoradas} {...dragProps}>
-                {peliculasValoradas.map(pelicula => (
-                  <MovieCard
-                    key={pelicula.id}
-                    pelicula={pelicula}
-                    esFavorita={favoritos.includes(pelicula.id)}
-                    onToggleFavorito={toggleFavorito}
-                    onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
-                  />
-                ))}
-              </div>
-              <button className={styles.flechaDerecha} onClick={() => scrollCarrusel(carruselValoradas, 'derecha')}>
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </section>
+          {SECCIONES.map(seccion => {
+            const peliculas = secciones[seccion.key]
+            if (!peliculas || peliculas.length === 0) return null
+            return (
+              <Carrusel
+                key={seccion.key}
+                titulo={seccion.titulo}
+                peliculas={peliculas}
+                favIds={favIds}
+                onToggleFavorito={toggleFavorito}
+                onVerDetalle={setPeliculaSeleccionada}
+              />
+            )
+          })}
 
         </main>
       </div>
@@ -113,8 +115,8 @@ export default function Peliculas() {
       {peliculaSeleccionada && (
         <ModalDetalle
           pelicula={peliculaSeleccionada}
-          esFavorita={favoritos.includes(peliculaSeleccionada.id)}
-          onToggleFavorito={toggleFavorito}
+          esFavorita={favIds.has(peliculaSeleccionada.id)}
+          onToggleFavorito={() => toggleFavorito(peliculaSeleccionada.id)}
           onCerrar={() => setPeliculaSeleccionada(null)}
           onAbrirResena={abrirModalResena}
         />
@@ -136,12 +138,40 @@ export default function Peliculas() {
   )
 }
 
+function Carrusel({ titulo, peliculas, favIds, onToggleFavorito, onVerDetalle }) {
+  const ref = useRef(null)
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>{titulo}</h2>
+      <div className={styles.carruselWrapper}>
+        <button className={styles.flechaIzquierda} onClick={() => scrollCarrusel(ref, 'izquierda')}>
+          <ChevronLeft size={18} />
+        </button>
+        <div className={styles.movieGrid} ref={ref} {...dragProps}>
+          {peliculas.map(pelicula => (
+            <MovieCard
+              key={pelicula.id}
+              pelicula={pelicula}
+              esFavorita={favIds.has(pelicula.id)}
+              onToggleFavorito={() => onToggleFavorito(pelicula.id)}
+              onVerDetalle={() => onVerDetalle(pelicula)}
+            />
+          ))}
+        </div>
+        <button className={styles.flechaDerecha} onClick={() => scrollCarrusel(ref, 'derecha')}>
+          <ChevronRight size={18} />
+        </button>
+      </div>
+    </section>
+  )
+}
+
 function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
   return (
     <div className={styles.movieCard} onClick={onVerDetalle}>
       {pelicula.poster
         ? <img src={pelicula.poster} alt={pelicula.title} className={styles.moviePoster} />
-        : <div className={styles.posterPlaceholder}>🎬</div>
+        : <div className={styles.posterPlaceholder} />
       }
       <div className={styles.movieInfo}>
         <div className={styles.movieTitle}>{pelicula.title}</div>
@@ -154,7 +184,7 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
           </div>
           <button
             className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
-            onClick={e => { e.stopPropagation(); onToggleFavorito(pelicula.id) }}
+            onClick={e => { e.stopPropagation(); onToggleFavorito() }}
             title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
           >
             {esFavorita ? '♥' : '♡'}

@@ -66,9 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/lists/{listId}/movies/{movieId}',  [MovieListController::class, 'removeMovie']);
 
     // Películas
-    Route::get('/movies',        [MovieController::class, 'index']);
-    Route::get('/movies/random', [MovieController::class, 'random']);
-
+    Route::get('/movies/sections', [MovieController::class, 'sections']);
+    Route::get('/movies/random',   [MovieController::class, 'random']);
+    Route::get('/movies',          [MovieController::class, 'index']);
+    Route::get('/movies/genres', [MovieController::class, 'genres']);
+    
     // Estadísticas
     Route::get('/stats', [StatsController::class, 'index']);
 });

@@ -9,51 +9,66 @@ import ModalResena from '../../Components/ModalResena'
 
 export default function Aleatoria() {
 
-  const [pelicula,            setPelicula]            = useState(null)
-  const [girando,             setGirando]             = useState(false)
-  const [favoritos,           setFavoritos]           = useState([])
-  const [modalResenaAbierto,  setModalResenaAbierto]  = useState(false)
-  const [tieneSeisEstrellas,  setTieneSeisEstrellas]  = useState(false)
+  const [pelicula,           setPelicula]           = useState(null)
+  const [girando,            setGirando]            = useState(false)
+  const [esFavorita,         setEsFavorita]         = useState(false)
+  const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
+  const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
   const audioRef = useRef(null)
-
-  function toggleFavorito(id) {
-    setFavoritos(prev =>
-      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
-    )
-  }
 
   function lanzarDado() {
     if (girando) return
-
     setGirando(true)
-
     if (audioRef.current) {
       audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => { })
+      audioRef.current.play().catch(() => {})
     }
-
     setTimeout(() => {
       api.get('/movies/random')
-        .then(res => setPelicula(res.data))
+        .then(res => {
+          const peli = res.data
+          setPelicula(peli)
+          // Verifica si esta película ya está en favoritas
+          api.get('/favorites')
+            .then(r => {
+              const ids = r.data.favorites.map(f => f.movie_id)
+              setEsFavorita(ids.includes(peli.id))
+            })
+            .catch(() => setEsFavorita(false))
+        })
         .catch(err => console.error(err))
         .finally(() => setGirando(false))
     }, 800)
   }
 
+  function toggleFavorito() {
+    if (!pelicula) return
+    if (esFavorita) {
+      // Necesitamos el id del registro favorite, no del movie
+      api.get('/favorites')
+        .then(r => {
+          const fav = r.data.favorites.find(f => f.movie_id === pelicula.id)
+          if (fav) {
+            api.delete(`/favorites/${fav.id}`)
+              .then(() => setEsFavorita(false))
+              .catch(err => console.error(err))
+          }
+        })
+    } else {
+      api.post('/favorites', { movie_id: pelicula.id })
+        .then(() => setEsFavorita(true))
+        .catch(err => console.error(err))
+    }
+  }
+
   function abrirModalResena() {
-    // Antes de abrir el modal verifica si el usuario ya tiene una reseña de 6 estrellas
     api.get('/my-reviews')
       .then(res => {
         setTieneSeisEstrellas(res.data.some(r => r.is_six_star))
         setModalResenaAbierto(true)
       })
-      .catch(() => {
-        // Si falla la consulta, abre igual — el backend validará
-        setModalResenaAbierto(true)
-      })
+      .catch(() => setModalResenaAbierto(true))
   }
-
-  const esFavorita = pelicula ? favoritos.includes(pelicula.id) : false
 
   return (
     <div className={styles.page}>
@@ -90,7 +105,6 @@ export default function Aleatoria() {
                   <circle cx="70" cy="70" r="7" fill="#c9a84c" />
                 </svg>
               </button>
-
               <p className={styles.dadoHint}>
                 {pelicula
                   ? '¿No es de tu interés? Presiona nuevamente para descubrir otra película'
@@ -100,11 +114,10 @@ export default function Aleatoria() {
 
             {pelicula && (
               <div className={styles.resultadoPanel}>
-
                 <div className={styles.poster}>
                   {pelicula.poster
                     ? <img src={pelicula.poster} alt={pelicula.title} className={styles.posterImg} />
-                    : <div className={styles.posterPlaceholder}>🎬</div>
+                    : <div className={styles.posterPlaceholder} />
                   }
                   <h2 className={styles.peliculaTitulo}>{pelicula.title}</h2>
                   <p className={styles.peliculaMeta}>{pelicula.anio} · {pelicula.genre}</p>
@@ -120,22 +133,20 @@ export default function Aleatoria() {
                     <h3 className={styles.sinopsisLabel}>Sinópsis</h3>
                     <p className={styles.sinopsisTexto}>{pelicula.synopsis}</p>
                   </div>
-
                   <div className={styles.acciones}>
                     <button
                       className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
-                      onClick={() => toggleFavorito(pelicula.id)}
+                      onClick={toggleFavorito}
+                      title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
                     >
                       {esFavorita ? '♥' : '♡'}
                     </button>
-
                     <button className={styles.resenaBtn} onClick={abrirModalResena}>
                       <Plus size={16} />
                       Agregar reseña
                     </button>
                   </div>
                 </div>
-
               </div>
             )}
 
@@ -145,15 +156,13 @@ export default function Aleatoria() {
       </div>
 
       <audio ref={audioRef} src="/sounds/dado.mp3" preload="auto" />
+
       {modalResenaAbierto && pelicula && (
         <ModalResena
           pelicula={pelicula}
           tieneSeisEstrellas={tieneSeisEstrellas}
           onCerrar={() => setModalResenaAbierto(false)}
-          onExito={() => {
-            setModalResenaAbierto(false)
-            console.log('Reseña guardada')
-          }}
+          onExito={() => setModalResenaAbierto(false)}
         />
       )}
 

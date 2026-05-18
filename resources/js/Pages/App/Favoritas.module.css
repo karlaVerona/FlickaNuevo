@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+/* ── LAYOUT ── */
+.page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: 'Crimson Pro', Georgia, serif;
+    position: relative;
+}
+
+.mainColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.bgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+}
+
+.pageHeader {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid rgb(138, 111, 34);
+}
+
+.pageTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a0a0a;
+    line-height: 1.1;
+}
+
+.pageSubtitle {
+    font-size: 0.95rem;
+    color: rgb(138, 111, 34);
+    margin-top: 0.3rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+/* ── FILA DE CONTROLES: búsqueda + filtros juntos ── */
+.controlesRow {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+}
+
+/* ── BÚSQUEDA ── */
+.searchBox {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #301413;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+}
+
+.searchIcon { color: rgb(255, 226, 147); flex-shrink: 0; }
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.searchInput::placeholder { color: rgb(239, 207, 120); }
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.searchClear:hover { color: #e07070; }
+
+/* ── FILTROS ── */
+.filtrosRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filtrosLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #301413;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.contador {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(26, 10, 10, 0.4);
+    margin-left: auto;
+}
+
+/* ── DROPDOWNS ── */
+.dropdown { position: relative; }
+
+.dropdownBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    background: #301413;
+    border: 1.5px solid rgba(138, 111, 34, 0.3);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgb(239, 207, 120);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.dropdownBtn:hover {
+    background: rgba(138, 111, 34, 0.15);
+    border-color: rgb(138, 111, 34);
+    color: #301413;
+}
+
+.dropdownBtnActivo {
+    background: rgba(138, 111, 34, 0.2);
+    border-color: rgb(138, 111, 34);
+    color: rgb(100, 78, 10);
+    font-weight: 600;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 140px;
+    background: #fff;
+    border: 1.5px solid rgba(138, 111, 34, 0.25);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 50;
+    overflow: hidden;
+}
+
+.dropdownItem {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #1a0a0a;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.dropdownItem:hover { background: rgba(138, 111, 34, 0.08); }
+
+.dropdownItemActivo {
+    background: rgba(138, 111, 34, 0.15);
+    font-weight: 600;
+    color: rgb(100, 78, 10);
+}
+
+.dropdownLimpiar {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #8b1a1a;
+    background: rgba(139, 26, 26, 0.05);
+    border: none;
+    border-top: 1px solid rgba(139, 26, 26, 0.1);
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.dropdownLimpiar:hover { background: rgba(139, 26, 26, 0.1); }
+
+/* ── GRID ── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.85rem;
+}
+
+/* ── CARD ── */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgb(65, 44, 23);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+}
+
+.posterPlaceholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(135deg, rgb(65, 44, 23), rgb(120, 88, 55));
+}
+
+.cardInfo {
+    padding: 0.55rem 0.6rem 0.4rem;
+}
+
+.cardTitulo {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardMeta {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 0.15rem;
+}
+
+.cardAcciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+}
+
+.stars {
+    font-size: 0.85rem;
+    color: #c9a84c;
+    letter-spacing: 1px;
+}
+
+.quitarBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e07070;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.quitarBtn:hover {
+    color: #c04040;
+    transform: scale(1.15);
+}
+
+/* ── ESTADOS VACÍOS ── */
+.cargando {
+    text-align: center;
+    padding: 4rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+}
+
+.vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    gap: 1rem;
+}
+
+.vacioIcono {
+    color: rgba(201, 168, 76, 0.3);
+}
+
+.vacioTexto {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+}

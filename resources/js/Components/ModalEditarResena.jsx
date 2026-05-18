@@ -2,16 +2,25 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import api from '@/lib/axios'
-import styles from './ModalResena.module.css'
+import styles from './ModalResena.module.css'  // reutiliza los mismos estilos
 import { MOODS, validarResena } from './Modalresena.helpers.js'
 import ModalExito from './ModalExito'
 
-export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstrellas }) {
+/*
+  Props:
+    - resena: objeto con los datos actuales { id, rating, review_text, mood, is_six_star, movie }
+    - onCerrar: cierra solo este modal
+    - onExito: cierra este modal + el ModalResenaDetalle
+    - tieneSeisEstrellas: boolean — si el usuario ya tiene una reseña de 6 estrellas
+      (distinta a la que se está editando)
+*/
+export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeisEstrellas }) {
 
+  // Precarga el formulario con los datos actuales de la reseña
   const [form, setForm] = useState({
-    rating:      0,
-    review_text: '',
-    mood:        '',
+    rating:      resena.rating,
+    review_text: resena.review_text,
+    mood:        resena.mood,
   })
 
   const [errores,      setErrores]      = useState({})
@@ -26,7 +35,9 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
   }
 
   function handleStarClick(valor) {
-    if (valor === 6 && tieneSeisEstrellas) {
+    // Solo bloquea si intenta poner 6 estrellas Y ya tiene otra reseña de 6
+    // (no bloquea si la reseña actual YA es de 6 estrellas)
+    if (valor === 6 && tieneSeisEstrellas && !resena.is_six_star) {
       setAlertaSeis(true)
       return
     }
@@ -46,15 +57,13 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
     setEnviando(true)
 
     try {
-      await api.post('/reviews', {
-        movie_id:    pelicula.id,
+      await api.put(`/reviews/${resena.id}`, {
         rating:      form.rating,
         review_text: form.review_text,
         mood:        form.mood,
         is_six_star: form.rating === 6,
       })
 
-      // Muestra el modal de éxito en lugar de cerrar directamente
       setExitoVisible(true)
 
     } catch (error) {
@@ -80,8 +89,8 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
 
         <div className={styles.header}>
           <div>
-            <h2 className={styles.titulo}>Agregar reseña</h2>
-            <p className={styles.subtitulo}>{pelicula.title ?? pelicula.titulo}</p>
+            <h2 className={styles.titulo}>Editar reseña</h2>
+            <p className={styles.subtitulo}>{resena.movie.title}</p>
           </div>
           <button className={styles.cerrarBtn} onClick={onCerrar}>
             <X size={18} />
@@ -100,6 +109,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             <div className={styles.errorGeneral}>{errores.general}</div>
           )}
 
+          {/* Calificación */}
           <div className={styles.campo}>
             <label className={styles.label}>Calificación</label>
             <div className={styles.estrellas}>
@@ -115,7 +125,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
                     onClick={() => handleStarClick(valor)}
                     onMouseEnter={() => setHoverRating(valor)}
                     onMouseLeave={() => setHoverRating(0)}
-                    title={esSeis ? 'Reseña destacada de 6 estrellas (solo una en tu perfil)' : `${valor} estrellas`}
+                    title={esSeis ? 'Reseña destacada de 6 estrellas' : `${valor} estrellas`}
                   >
                     ★
                   </button>
@@ -130,6 +140,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             {errores.rating && <span className={styles.error}>{errores.rating}</span>}
           </div>
 
+          {/* Mood */}
           <div className={styles.campo}>
             <label className={styles.label}>Mood</label>
             <div className={styles.moodGrid}>
@@ -147,6 +158,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             {errores.mood && <span className={styles.error}>{errores.mood}</span>}
           </div>
 
+          {/* Texto */}
           <div className={styles.campo}>
             <label className={styles.label}>Tu reseña</label>
             <textarea
@@ -165,19 +177,18 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
               Cancelar
             </button>
             <button type="submit" className={styles.guardarBtn} disabled={enviando}>
-              {enviando ? 'Guardando...' : 'Guardar reseña'}
+              {enviando ? 'Guardando...' : 'Guardar cambios'}
             </button>
           </div>
 
         </form>
       </div>
 
-      
       {exitoVisible && createPortal(
         <ModalExito
           onAceptar={() => {
             setExitoVisible(false)
-            onExito?.()
+            onExito?.()   // cierra ModalEditarResena + ModalResenaDetalle
             onCerrar()
           }}
         />,
