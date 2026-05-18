@@ -24,7 +24,7 @@ export default function Login() {
       })
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
-      router.visit('/catalogo')
+      router.visit('/peliculas')
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors)
