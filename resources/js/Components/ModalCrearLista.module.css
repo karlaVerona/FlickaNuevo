@@ -2,7 +2,7 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.7);
     z-index: 100;
     backdrop-filter: blur(3px);
 }
@@ -17,12 +17,12 @@
     width: 540px;
     max-width: 92vw;
     max-height: 88vh;
-    background: #ffffffde;
+    background: #2a1010;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
 }
 
 /* ── HEADER ── */
@@ -31,7 +31,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #e8d8d8;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
     flex-shrink: 0;
 }
 
@@ -39,16 +39,16 @@
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.3rem;
     font-weight: 700;
-    color: #1a0a0a;
+    color: #fff;
 }
 
 .cerrarBtn {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    border: 1px solid #e8d8d8;
-    background: rgba(139,26,26,0.06);
-    color: #8b1a1a;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(20,5,5,0.8);
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,7 +56,7 @@
     transition: background 0.15s;
 }
 
-.cerrarBtn:hover { background: rgba(139,26,26,0.14); }
+.cerrarBtn:hover { background: #8b1a1a; }
 
 /* ── BODY ── */
 .body {
@@ -67,12 +67,12 @@
     flex-direction: column;
     gap: 1.25rem;
     scrollbar-width: thin;
-    scrollbar-color: rgba(139,26,26,0.2) transparent;
+    scrollbar-color: #ae8c5f52 transparent;
 }
 
 .body::-webkit-scrollbar { width: 3px; }
 .body::-webkit-scrollbar-track { background: transparent; }
-.body::-webkit-scrollbar-thumb { background: rgba(139,26,26,0.2); border-radius: 999px; }
+.body::-webkit-scrollbar-thumb { background: #ae8c5f52; border-radius: 999px; }
 
 /* ── FOOTER ── */
 .footer {
@@ -80,7 +80,7 @@
     justify-content: flex-end;
     gap: 0.75rem;
     padding: 1rem 1.5rem;
-    border-top: 1px solid #e8d8d8;
+    border-top: 1px solid rgba(255,255,255,0.06);
     flex-shrink: 0;
 }
 
@@ -95,64 +95,30 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #492c2c;
+    color: rgba(255,255,255,0.45);
 }
 
 .input {
-    width: 100%;
-    padding: 0.7rem 0.2rem;
+    background: #4a2820;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
     font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 0.97rem;
-    color: #1a0a0a;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid rgba(139,26,26,0.25);
+    font-size: 0.95rem;
+    color: #fff;
     outline: none;
     transition: border-color 0.2s;
-    box-sizing: border-box;
 }
 
-.input::placeholder { color: #9d6969; }
-.input:focus { border-bottom-color: #8b1a1a; }
+.input::placeholder { color: rgba(255,255,255,0.25); }
+.input:focus { border-color: rgba(201,168,76,0.5); }
 
 .errorMsg {
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 0.82rem;
-    color: #c0392b;
-}
-
-/* ── PREVIEW EN VIVO ── */
-.preview {
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    transition: background 0.2s;
-    border: 1px solid rgba(0,0,0,0.06);
-}
-
-.previewIcono {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.392);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.previewNombre {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #e07070;
 }
 
 /* ── PALETA DE COLORES ── */
@@ -171,8 +137,8 @@
     transition: transform 0.15s, border-color 0.15s;
 }
 
-.colorBtn:hover { transform: scale(1.22); }
-.colorBtnActivo { border-color: #8b1a1a; transform: scale(1.23); }
+.colorBtn:hover { transform: scale(1.15); }
+.colorBtnActivo { border-color: #c9a84c; transform: scale(1.15); }
 
 /* ── ICONOS ── */
 .iconoGrid {
@@ -185,8 +151,8 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    border: 1.5px solid #e8d8d8;
-    background: #220000;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
     font-size: 1.2rem;
     cursor: pointer;
     display: flex;
@@ -195,24 +161,21 @@
     transition: background 0.15s, border-color 0.15s;
 }
 
-.iconoBtn:hover { background: rgba(139, 26, 26, 0.57); border-color: rgba(139,26,26,0.3); }
-.iconoBtnActivo { background: rgba(139, 26, 26, 0.57); border-color: #8b1a1a; }
+.iconoBtn:hover { background: rgba(201,168,76,0.12); }
+.iconoBtnActivo { background: rgba(201,168,76,0.2); border-color: #c9a84c; }
 
-/* ── BÚSQUEDA DE PELÍCULAS ── */
+/* ── BÚSQUEDA ── */
 .searchBox {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid rgba(139,26,26,0.25);
-    padding: 0.5rem 0.2rem;
-    transition: border-color 0.2s;
+    background: #4a2820;
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid rgba(255,255,255,0.08);
 }
 
-.searchBox:focus-within { border-bottom-color: #8b1a1a; }
-
-.searchIcon { color: #8b1a1a; flex-shrink: 0; }
+.searchIcon { color: rgb(255, 226, 147); flex-shrink: 0; }
 
 .searchInput {
     flex: 1;
@@ -220,38 +183,37 @@
     border: none;
     outline: none;
     font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 0.95rem;
-    color: #1a0a0a;
+    font-size: 0.9rem;
+    color: #fff;
 }
 
-.searchInput::placeholder { color: #9d6969; }
+.searchInput::placeholder { color: rgba(255,255,255,0.25); }
 
 .searchClear {
     background: none;
     border: none;
     cursor: pointer;
-    color: #b0a0a0;
+    color: rgba(255,255,255,0.35);
     display: flex;
     align-items: center;
     padding: 0;
     transition: color 0.15s;
 }
 
-.searchClear:hover { color: #8b1a1a; }
+.searchClear:hover { color: #e07070; }
 
 .buscandoMsg {
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 0.82rem;
-    color: #9a9090;
+    color: rgba(255,255,255,0.3);
 }
 
 /* ── RESULTADOS ── */
 .resultadosList {
-    background: #fff;
+    background: #1e0b0b;
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #e8d8d8;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
 }
 
 .resultadoItem {
@@ -262,15 +224,15 @@
     padding: 0.6rem 0.85rem;
     background: none;
     border: none;
-    border-bottom: 1px solid #f5eded;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     cursor: pointer;
     transition: background 0.12s;
     text-align: left;
 }
 
 .resultadoItem:last-child { border-bottom: none; }
-.resultadoItem:hover { background: rgba(139,26,26,0.05); }
-.resultadoItemActivo { background: rgba(74,154,138,0.08); }
+.resultadoItem:hover { background: rgba(255,255,255,0.05); }
+.resultadoItemActivo { background: rgba(74,154,138,0.12); }
 
 .resultadoPoster {
     width: 28px;
@@ -283,8 +245,8 @@
 .resultadoTitulo {
     flex: 1;
     font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 0.92rem;
-    color: #2a1a10;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -293,14 +255,14 @@
 .resultadoAnio {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.72rem;
-    color: #9a9090;
+    color: rgba(255,255,255,0.35);
     flex-shrink: 0;
 }
 
 .checkIcon { color: #4a9a8a; flex-shrink: 0; }
-.plusIcon  { color: #b0a0a0; flex-shrink: 0; }
+.plusIcon  { color: rgba(255,255,255,0.35); flex-shrink: 0; }
 
-/* ── CHIPS ── */
+/* ── CHIPS DE PELÍCULAS SELECCIONADAS ── */
 .seleccionadas {
     display: flex;
     flex-direction: column;
@@ -310,7 +272,7 @@
 .seleccionadasLabel {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.72rem;
-    color: #302f2f;
+    color: rgba(255,255,255,0.4);
 }
 
 .chips {
@@ -324,19 +286,19 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.3rem 0.65rem;
-    background: rgba(74,154,138,0.1);
-    border: 1px solid rgba(74,154,138,0.35);
+    background: rgba(74,154,138,0.2);
+    border: 1px solid rgba(74,154,138,0.4);
     border-radius: 999px;
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 0.82rem;
-    color: #3a8070;
+    color: #4a9a8a;
 }
 
 .chip button {
     background: none;
     border: none;
     cursor: pointer;
-    color: #3a8070;
+    color: #4a9a8a;
     display: flex;
     align-items: center;
     padding: 0;
@@ -347,33 +309,60 @@
 .cancelarBtn {
     padding: 0.65rem 1.25rem;
     background: transparent;
-    border: 1.5px solid #c8bfb5;
+    border: 1.5px solid rgba(255,255,255,0.15);
     border-radius: 8px;
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 0.92rem;
-    color: #6b6560;
+    color: rgba(255,255,255,0.5);
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s;
 }
 
-.cancelarBtn:hover { border-color: #8b1a1a; color: #8b1a1a; }
+.cancelarBtn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
 
 .guardarBtn {
     padding: 0.65rem 1.5rem;
     background: #4a9a8a;
     border: none;
     border-radius: 8px;
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Crimson Pro', Georgia, serif;
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 600;
     color: #fff;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s;
 }
 
-.guardarBtn:hover:not(:disabled) {
-    background: #3a8070;
-    transform: translateY(-1px);
-}
-
+.guardarBtn:hover:not(:disabled) { background: #3a8070; }
 .guardarBtn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.preview {
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    transition: background 0.2s;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.previewIcono {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.392);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.previewNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
