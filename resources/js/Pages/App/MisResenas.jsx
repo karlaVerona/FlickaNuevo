@@ -48,6 +48,12 @@ export default function MisResenas() {
     setDropdownAbierto(prev => prev === nombre ? null : nombre)
   }
 
+  function actualizarResena(resenaActualizada) {
+    setResenas(prev => prev.map(r => 
+        r.id === resenaActualizada.id ? resenaActualizada : r
+    ))
+    setResenaSeleccionada(resenaActualizada)
+}
   const resenaDestacada  = resenas.find(r => r.is_six_star) ?? null
   const resenasNormales  = resenas.filter(r => !r.is_six_star)
 
@@ -218,10 +224,11 @@ export default function MisResenas() {
 
       {resenaSeleccionada && (
         <ModalResenaDetalle
-          resena={resenaSeleccionada}
-          onCerrar={() => setResenaSeleccionada(null)}
-          onEliminar={eliminarResena}
-          tieneSeisEstrellas={resenas.some(r => r.is_six_star && r.id !== resenaSeleccionada.id)}
+            resena={resenaSeleccionada}
+            onCerrar={() => setResenaSeleccionada(null)}
+            onEliminar={eliminarResena}
+            onActualizar={actualizarResena}
+            tieneSeisEstrellas={resenas.some(r => r.is_six_star && r.id !== resenaSeleccionada.id)}
         />
       )}
 

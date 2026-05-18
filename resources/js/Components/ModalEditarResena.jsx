@@ -28,6 +28,7 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
   const [alertaSeis,   setAlertaSeis]   = useState(false)
   const [exitoVisible, setExitoVisible] = useState(false)
   const [hoverRating,  setHoverRating]  = useState(0)
+  const [resenaActualizada, setResenaActualizada] = useState(null)
 
   function handleChange(campo, valor) {
     setForm(prev => ({ ...prev, [campo]: valor }))
@@ -57,14 +58,16 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
     setEnviando(true)
 
     try {
-      await api.put(`/reviews/${resena.id}`, {
-        rating:      form.rating,
-        review_text: form.review_text,
-        mood:        form.mood,
-        is_six_star: form.rating === 6,
-      })
+      const response = await api.put(`/reviews/${resena.id}`, {
+      rating:      form.rating,
+      review_text: form.review_text,
+      mood:        form.mood,
+      is_six_star: form.rating === 6,
+  })
 
-      setExitoVisible(true)
+    setResenaActualizada(response.data.review)
+    setExitoVisible(true)
+
 
     } catch (error) {
       if (error.response?.status === 422) {
@@ -184,16 +187,14 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
         </form>
       </div>
 
-      {exitoVisible && createPortal(
-        <ModalExito
-          onAceptar={() => {
+         {exitoVisible && (
+    <ModalExito
+        onAceptar={() => {
             setExitoVisible(false)
-            onExito?.()   // cierra ModalEditarResena + ModalResenaDetalle
-            onCerrar()
-          }}
-        />,
-        document.body
-      )}
+            onExito?.(resenaActualizada)
+        }}
+    />
+)}
     </>
   )
 }

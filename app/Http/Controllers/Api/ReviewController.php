@@ -135,9 +135,9 @@ class ReviewController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Review actualizada',
-            'review'  => $review
-        ]);
+    'message' => 'Review actualizada',
+    'review'  => $review->load('movie')  // ← carga la relación movie
+]);
     }
 
     public function destroy(Request $request, $id)

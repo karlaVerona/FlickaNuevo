@@ -4,7 +4,7 @@ import styles from './ModalResenaDetalle.module.css'
 import ModalEditarResena from './ModalEditarResena'
 import ModalEliminar from './ModalEliminar'
 
-export default function ModalResenaDetalle({ resena, onCerrar, onEliminar, tieneSeisEstrellas }) {
+export default function ModalResenaDetalle({ resena, onCerrar, onEliminar, onActualizar, tieneSeisEstrellas }) {
 
   const [editarAbierto,   setEditarAbierto]   = useState(false)
   const [eliminarAbierto, setEliminarAbierto] = useState(false)
@@ -69,10 +69,10 @@ export default function ModalResenaDetalle({ resena, onCerrar, onEliminar, tiene
           resena={resena}
           tieneSeisEstrellas={tieneSeisEstrellas}
           onCerrar={() => setEditarAbierto(false)}
-          onExito={() => {
-            setEditarAbierto(false)
-            onCerrar()  // cierra también el ModalResenaDetalle
-          }}
+          onExito={(resenaActualizada) => {
+    onActualizar?.(resenaActualizada)
+    setEditarAbierto(false)
+}}
         />
       )}
 
