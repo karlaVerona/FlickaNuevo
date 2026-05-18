@@ -89,7 +89,7 @@ export default function MisListas() {
                   onClick={() => router.visit(`/mis-listas/${lista.id}`)}
                 >
                   <div className={styles.listaIcono}>
-                    <Icon icon={lista.icon ?? 'noto:movie-camera'} width={28} />
+                    <Icon icon={lista.icon ?? 'noto:movie-camera'} width={38} />
                   </div>
                   <div className={styles.listaInfo}>
                     <span className={styles.listaNombre}>{lista.name}</span>

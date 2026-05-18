@@ -145,7 +145,7 @@ export default function ListaDetalle({ id }) {
                 <Undo2 size={18} />
               </button>
               <div className={styles.iconoCirculo}>
-                <Icon icon={lista?.icon ?? 'noto:movie-camera'} width={34} />
+                <Icon icon={lista?.icon ?? 'noto:movie-camera'} width={48} />
               </div>
               <div>
                 <h1 className={styles.bannerTitulo}>{lista?.name ?? 'Cargando...'}</h1>
