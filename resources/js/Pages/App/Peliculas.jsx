@@ -12,26 +12,26 @@ import api from '@/lib/axios'
 const SECCIONES = [
   { key: 'recientes', titulo: '🎬 Agregadas recientemente' },
   { key: 'valoradas', titulo: '🏆 Las mejor valoradas' },
-  { key: 'familia',   titulo: '👨‍👩‍👧 Modo familia activado' },
-  { key: 'comedia',   titulo: '🎪 Noche de carcajadas' },
-  { key: 'terror',    titulo: '😭 Las de terror...' },
+  { key: 'familia', titulo: '👨‍👩‍👧 Modo familia activado' },
+  { key: 'comedia', titulo: '🎪 Noche de carcajadas' },
+  { key: 'terror', titulo: '😭 Las de terror...' },
   { key: 'romantica', titulo: '❤️ Mariposas en el estómago' },
-  { key: 'miedo',     titulo: '😱 Si te atreves...' },
-  { key: 'scifi',     titulo: '🚀 Fuera de este mundo' },
-  { key: 'musical',   titulo: '🎵 A todo volumen' },
-  { key: 'drama',     titulo: '🥀 Grandes historias' },
-  { key: 'accion',    titulo: '⚡ Al filo del asiento' },
+  { key: 'miedo', titulo: '😱 Si te atreves...' },
+  { key: 'scifi', titulo: '🚀 Fuera de este mundo' },
+  { key: 'musical', titulo: '🎵 A todo volumen' },
+  { key: 'drama', titulo: '🥀 Grandes historias' },
+  { key: 'accion', titulo: '⚡ Al filo del asiento' },
 ]
 
 export default function Peliculas() {
 
-  const [secciones,            setSecciones]            = useState({})
-  const [cargando,             setCargando]             = useState(true)
+  const [secciones, setSecciones] = useState({})
+  const [cargando, setCargando] = useState(true)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
-  const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
-  const [favIds,               setFavIds]               = useState(new Set())
-  const [favMap,               setFavMap]               = useState({})
+  const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
+  const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
+  const [favIds, setFavIds] = useState(new Set())
+  const [favMap, setFavMap] = useState({})
 
   useEffect(() => {
     Promise.all([
@@ -72,11 +72,10 @@ export default function Peliculas() {
   function abrirModalResena() {
     api.get('/my-reviews')
       .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setModalResenaAbierto(true))
   }
 
-  if (cargando) return <div>Cargando...</div>
 
   return (
     <div className={styles.page}>
@@ -88,27 +87,28 @@ export default function Peliculas() {
         <TopBar />
 
         <main className={styles.content}>
-
           <div className={styles.pageHeader}>
             <h1 className={styles.pageTitle}>Catálogo de películas</h1>
             <p className={styles.pageSubtitle}>Descubre una nueva historia</p>
           </div>
 
-          {SECCIONES.map(seccion => {
-            const peliculas = secciones[seccion.key]
-            if (!peliculas || peliculas.length === 0) return null
-            return (
-              <Carrusel
-                key={seccion.key}
-                titulo={seccion.titulo}
-                peliculas={peliculas}
-                favIds={favIds}
-                onToggleFavorito={toggleFavorito}
-                onVerDetalle={setPeliculaSeleccionada}
-              />
-            )
-          })}
-
+          {cargando
+            ? <div className={styles.cargando}>Cargando películas...</div>
+            : SECCIONES.map(seccion => {
+              const peliculas = secciones[seccion.key]
+              if (!peliculas || peliculas.length === 0) return null
+              return (
+                <Carrusel
+                  key={seccion.key}
+                  titulo={seccion.titulo}
+                  peliculas={peliculas}
+                  favIds={favIds}
+                  onToggleFavorito={toggleFavorito}
+                  onVerDetalle={setPeliculaSeleccionada}
+                />
+              )
+            })
+          }
         </main>
       </div>
 

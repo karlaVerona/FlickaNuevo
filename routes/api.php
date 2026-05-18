@@ -64,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/lists/{id}',                       [MovieListController::class, 'destroy']);
     Route::post('/lists/{listId}/movies',              [MovieListController::class, 'addMovie']);
     Route::delete('/lists/{listId}/movies/{movieId}',  [MovieListController::class, 'removeMovie']);
+    Route::put('/lists/{id}',                          [MovieListController::class, 'update']);
 
     // Películas
     Route::get('/movies/sections', [MovieController::class, 'sections']);

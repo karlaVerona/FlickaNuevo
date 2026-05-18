@@ -1,0 +1,379 @@
+/* ── OVERLAY ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+/* ── MODAL ── */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: 540px;
+    max-width: 92vw;
+    max-height: 88vh;
+    background: #ffffffde;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+}
+
+/* ── HEADER ── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e0d8cc;
+    flex-shrink: 0;
+}
+
+.titulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a0a0a;
+}
+
+.cerrarBtn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #e0d8cc;
+    background: rgba(201,168,76,0.08);
+    color: #ae8c5f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.cerrarBtn:hover { background: rgba(201,168,76,0.2); }
+
+/* ── BODY ── */
+.body {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201,168,76,0.3) transparent;
+}
+
+.body::-webkit-scrollbar { width: 3px; }
+.body::-webkit-scrollbar-track { background: transparent; }
+.body::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 999px; }
+
+/* ── FOOTER ── */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e0d8cc;
+    flex-shrink: 0;
+}
+
+/* ── CAMPOS ── */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6b6560;
+}
+
+.input {
+    width: 100%;
+    padding: 0.7rem 0.2rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.97rem;
+    color: #1a0a0a;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ae8c5f6e;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.input::placeholder { color: #6c5831; }
+.input:focus { border-bottom-color: #ae8c5f; }
+
+.errorMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #c0392b;
+}
+
+/* ── PREVIEW EN VIVO ── */
+.preview {
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    transition: background 0.2s;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.previewIcono {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.392);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.previewNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── PALETA DE COLORES ── */
+.colorGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.colorBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.colorBtn:hover { transform: scale(1.22); }
+.colorBtnActivo { border-color: #ae8c5f; transform: scale(1.23); }
+
+/* ── ICONOS ── */
+.iconoGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.iconoBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1.5px solid #e0d8cc;
+    background: #fafaf8;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.iconoBtn:hover { background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.4); }
+.iconoBtnActivo { background: rgba(201,168,76,0.15); border-color: #ae8c5f; }
+
+/* ── BÚSQUEDA DE PELÍCULAS ── */
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ae8c5f6e;
+    padding: 0.5rem 0.2rem;
+    transition: border-color 0.2s;
+}
+
+.searchBox:focus-within { border-bottom-color: #ae8c5f; }
+
+.searchIcon { color: #ae8c5f; flex-shrink: 0; }
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #1a0a0a;
+}
+
+.searchInput::placeholder { color: #6c5831; }
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6c5831;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.searchClear:hover { color: #ae8c5f; }
+
+.buscandoMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #9a9090;
+}
+
+/* ── RESULTADOS ── */
+.resultadosList {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e0d8cc;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.resultadoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #f0ebe3;
+    cursor: pointer;
+    transition: background 0.12s;
+    text-align: left;
+}
+
+.resultadoItem:last-child { border-bottom: none; }
+.resultadoItem:hover { background: rgba(201,168,76,0.07); }
+.resultadoItemActivo { background: rgba(74,154,138,0.08); }
+
+.resultadoPoster {
+    width: 28px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.resultadoTitulo {
+    flex: 1;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #2a1a10;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resultadoAnio {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #9a9090;
+    flex-shrink: 0;
+}
+
+.checkIcon { color: #4a9a8a; flex-shrink: 0; }
+.plusIcon  { color: #b0a898; flex-shrink: 0; }
+
+/* ── CHIPS ── */
+.seleccionadas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.seleccionadasLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #5b5a5a;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    background: rgba(74,154,138,0.1);
+    border: 1px solid rgba(74,154,138,0.35);
+    border-radius: 999px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #3a8070;
+}
+
+.chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #3a8070;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    line-height: 1;
+}
+
+/* ── BOTONES FOOTER ── */
+.cancelarBtn {
+    padding: 0.65rem 1.25rem;
+    background: transparent;
+    border: 1.5px solid #c8bfb5;
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #6b6560;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cancelarBtn:hover { border-color: #ae8c5f; color: #ae8c5f; }
+
+.guardarBtn {
+    padding: 0.65rem 1.5rem;
+    background: #4a9a8a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.guardarBtn:hover:not(:disabled) {
+    background: #3a8070;
+    transform: translateY(-1px);
+}
+
+.guardarBtn:disabled { opacity: 0.65; cursor: not-allowed; }

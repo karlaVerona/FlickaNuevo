@@ -8,7 +8,7 @@ class MovieList extends Model
 {
     protected $table = 'lists';
 
-    protected $fillable = ['user_id', 'name'];
+    protected $fillable = ['user_id', 'name', 'color', 'icon'];
 
     public function user()
     {

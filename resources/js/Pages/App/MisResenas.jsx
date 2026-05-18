@@ -6,17 +6,17 @@ import styles from './MisResenas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import ModalResenaDetalle from '../../Components/ModalResenaDetalle'
 import api from '@/lib/axios'
-import {ORDENAR_AGREGADA, ORDENAR_VALORACION, filtrarResenas } from './MisResenas.helpers.js'
+import { ORDENAR_AGREGADA, ORDENAR_VALORACION, filtrarResenas } from './MisResenas.helpers.js'
 
 export default function MisResenas() {
 
-  const [resenas,            setResenas]            = useState([])
-  const [cargando,           setCargando]           = useState(true)
-  const [busqueda,           setBusqueda]           = useState('')
-  const [filtroGenero,       setFiltroGenero]       = useState(null)
-  const [filtroAgregada,     setFiltroAgregada]     = useState(null)
-  const [filtroValoracion,   setFiltroValoracion]   = useState(null)
-  const [dropdownAbierto,    setDropdownAbierto]    = useState(null)
+  const [resenas, setResenas] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroGenero, setFiltroGenero] = useState(null)
+  const [filtroAgregada, setFiltroAgregada] = useState(null)
+  const [filtroValoracion, setFiltroValoracion] = useState(null)
+  const [dropdownAbierto, setDropdownAbierto] = useState(null)
   const [resenaSeleccionada, setResenaSeleccionada] = useState(null)
   const [generos, setGeneros] = useState([])
 
@@ -24,8 +24,8 @@ export default function MisResenas() {
     cargarResenas()
     api.get('/movies/genres')
       .then(res => setGeneros(res.data))
-      .catch(() => {})
-}, [])
+      .catch(() => { })
+  }, [])
 
   function cargarResenas() {
     setCargando(true)
@@ -49,19 +49,18 @@ export default function MisResenas() {
   }
 
   function actualizarResena(resenaActualizada) {
-    setResenas(prev => prev.map(r => 
-        r.id === resenaActualizada.id ? resenaActualizada : r
+    setResenas(prev => prev.map(r =>
+      r.id === resenaActualizada.id ? resenaActualizada : r
     ))
     setResenaSeleccionada(resenaActualizada)
-}
-  const resenaDestacada  = resenas.find(r => r.is_six_star) ?? null
-  const resenasNormales  = resenas.filter(r => !r.is_six_star)
+  }
+  const resenaDestacada = resenas.find(r => r.is_six_star) ?? null
+  const resenasNormales = resenas.filter(r => !r.is_six_star)
 
   const resenasFiltradas = filtrarResenas(resenasNormales, {
     busqueda, filtroGenero, filtroAgregada, filtroValoracion
   })
 
-  if (cargando) return <div>Cargando...</div>
 
   return (
     <div className={styles.page}>
@@ -199,24 +198,25 @@ export default function MisResenas() {
           {/* ── Todas las reseñas ── */}
           <section className={styles.seccionTodas}>
             <h2 className={styles.tituloTodas}>Todas las reseñas</h2>
-            {resenasFiltradas.length > 0
-              ? (
-                <div className={styles.resenasGrid}>
-                  {resenasFiltradas.map(resena => (
-                    <ResenaCard
-                      key={resena.id}
-                      resena={resena}
-                      onClick={() => setResenaSeleccionada(resena)}
-                    />
-                  ))}
-                </div>
-              )
-              : (
-                <div className={styles.sinResultados}>
-                  No se encontraron reseñas con esos filtros.
-                </div>
-              )
-            }
+            {cargando ? (
+              <div className={styles.cargando}>Cargando reseñas...</div>
+            ) : resenasFiltradas.length > 0 ? (
+              <div className={styles.resenasGrid}>
+                {resenasFiltradas.map(resena => (
+                  <ResenaCard
+                    key={resena.id}
+                    resena={resena}
+                    onClick={() => setResenaSeleccionada(resena)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.sinResultados}>
+                {busqueda || filtroGenero || filtroAgregada || filtroValoracion
+                  ? 'No se encontraron reseñas con esos filtros.'
+                  : 'Aún no tienes reseñas creadas.'}
+              </div>
+            )}
           </section>
 
         </main>
@@ -224,11 +224,11 @@ export default function MisResenas() {
 
       {resenaSeleccionada && (
         <ModalResenaDetalle
-            resena={resenaSeleccionada}
-            onCerrar={() => setResenaSeleccionada(null)}
-            onEliminar={eliminarResena}
-            onActualizar={actualizarResena}
-            tieneSeisEstrellas={resenas.some(r => r.is_six_star && r.id !== resenaSeleccionada.id)}
+          resena={resenaSeleccionada}
+          onCerrar={() => setResenaSeleccionada(null)}
+          onEliminar={eliminarResena}
+          onActualizar={actualizarResena}
+          tieneSeisEstrellas={resenas.some(r => r.is_six_star && r.id !== resenaSeleccionada.id)}
         />
       )}
 

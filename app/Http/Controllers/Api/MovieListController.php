@@ -22,15 +22,37 @@ class MovieListController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:50',
+            'name'  => 'required|string|max:50',
+            'color' => 'nullable|string|max:20',
+            'icon'  => 'nullable|string|max:50',
         ]);
 
         $list = MovieList::create([
             'user_id' => $request->user()->id,
             'name'    => $request->name,
+            'color'   => $request->color,
+            'icon'    => $request->icon,
         ]);
 
         return response()->json($list, 201);
+    }
+
+    // Editar lista
+    public function update(Request $request, $id)
+    {
+        $list = MovieList::where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        $request->validate([
+            'name'  => 'sometimes|string|max:50',
+            'color' => 'nullable|string|max:20',
+            'icon'  => 'nullable|string|max:50',
+        ]);
+
+        $list->update($request->only(['name', 'color', 'icon']));
+
+        return response()->json($list);
     }
 
     // Agregar película a lista

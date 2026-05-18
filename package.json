@@ -7,6 +7,7 @@
     },
     "dependencies": {
         "@headlessui/react": "^2.2.10",
+        "@iconify/react": "^6.0.2",
         "@inertiajs/react": "^2.0",
         "lucide-react": "^1.16.0",
         "react": "^18.2.0",

@@ -25,21 +25,19 @@ export default function Sidebar({ active = '' }) {
     return `${styles.navItem} ${active === name ? styles.navItemActive : ''}`
   }
 
-  async function handleLogout() {
-    try {
-      await axios.post('/api/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-    } catch (error) {
-      // Si falla igual limpiamos y redirigimos
-    } finally {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      window.location.href = '/login'
-    }
-  }
+async function handleLogout() {
+  try {
+    await axios.post('/api/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  } catch (error) {}
+  
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  window.location.href = '/logout-web'
+}
 
   return (
     <aside className={styles.sidebar}>
@@ -116,13 +114,8 @@ export default function Sidebar({ active = '' }) {
         Suscripción
       </Link>
 
-      <div className={styles.divider} />
 
-      {/* ── CERRAR SESIÓN ── */}
-      <button onClick={handleLogout} className={navClass('logout')}>
-        <LogOut size={16} className={styles.navIcon} />
-        Cerrar sesión
-      </button>
+      
 
     </aside>
   )

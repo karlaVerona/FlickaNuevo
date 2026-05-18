@@ -11,24 +11,24 @@ import ModalDetalle from '../../Components/ModalDetalle'
 
 const OPCIONES_ANIO = [
   { label: 'Más reciente', value: 'mas_reciente' },
-  { label: 'Más antigua',  value: 'mas_antigua' },
+  { label: 'Más antigua', value: 'mas_antigua' },
 ]
 
 export default function Busqueda() {
 
-  const [busqueda,             setBusqueda]             = useState('')
-  const [filtroGenero,         setFiltroGenero]         = useState(null)
-  const [filtroAnio,           setFiltroAnio]           = useState(null)
-  const [filtroOrden,          setFiltroOrden]          = useState(null)
-  const [dropdownAbierto,      setDropdownAbierto]      = useState(null)
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroGenero, setFiltroGenero] = useState(null)
+  const [filtroAnio, setFiltroAnio] = useState(null)
+  const [filtroOrden, setFiltroOrden] = useState(null)
+  const [dropdownAbierto, setDropdownAbierto] = useState(null)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [peliculas,            setPeliculas]            = useState([])
-  const [generos,              setGeneros]              = useState([])
-  const [cargando,             setCargando]             = useState(true)
-  const [modalResenaAbierto,   setModalResenaAbierto]   = useState(false)
-  const [tieneSeisEstrellas,   setTieneSeisEstrellas]   = useState(false)
-  const [favIds,               setFavIds]               = useState(new Set())
-  const [favMap,               setFavMap]               = useState({})
+  const [peliculas, setPeliculas] = useState([])
+  const [generos, setGeneros] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
+  const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
+  const [favIds, setFavIds] = useState(new Set())
+  const [favMap, setFavMap] = useState({})
 
   // Carga géneros y favoritas al montar
   useEffect(() => {
@@ -42,16 +42,16 @@ export default function Busqueda() {
       favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
       setFavIds(ids)
       setFavMap(map)
-    }).catch(() => {})
+    }).catch(() => { })
   }, [])
 
   // Busca películas cuando cambian los filtros
   useEffect(() => {
     const params = {}
-    if (busqueda)    params.search = busqueda
+    if (busqueda) params.search = busqueda
     if (filtroGenero) params.genre = filtroGenero
-    if (filtroAnio)   params.anio  = filtroAnio
-    if (filtroOrden)  params.orden = filtroOrden
+    if (filtroAnio) params.anio = filtroAnio
+    if (filtroOrden) params.orden = filtroOrden
 
     setCargando(true)
     api.get('/movies', { params })
@@ -86,7 +86,7 @@ export default function Busqueda() {
   function abrirModalResena() {
     api.get('/my-reviews')
       .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setModalResenaAbierto(true))
   }
 
@@ -209,17 +209,17 @@ export default function Busqueda() {
 
           <div className={styles.resultsGrid}>
             {cargando
-              ? <div>Cargando...</div>
+              ? <div className={styles.cargando}>Cargando películas...</div>
               : peliculas.length > 0
                 ? peliculas.map(pelicula => (
-                    <MovieCard
-                      key={pelicula.id}
-                      pelicula={pelicula}
-                      esFavorita={favIds.has(pelicula.id)}
-                      onToggleFavorito={() => toggleFavorito(pelicula.id)}
-                      onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
-                    />
-                  ))
+                  <MovieCard
+                    key={pelicula.id}
+                    pelicula={pelicula}
+                    esFavorita={favIds.has(pelicula.id)}
+                    onToggleFavorito={() => toggleFavorito(pelicula.id)}
+                    onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
+                  />
+                ))
                 : <div className={styles.sinResultados}>No se encontraron películas con esos filtros.</div>
             }
           </div>
