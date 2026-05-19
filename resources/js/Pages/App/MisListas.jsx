@@ -10,7 +10,7 @@ import api from '@/lib/axios'
 import ModalCrearLista from '../../Components/ModalCrearLista'
 import ModalPro from '../../Components/ModalPro'
 
-const LIMITE_GRATIS = 3
+const LIMITE_GRATIS = 6
 
 export default function MisListas() {
 

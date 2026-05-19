@@ -293,3 +293,54 @@
     background: #3a8070;
     transform: translateY(-1px);
 }
+
+.mensajeExito {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #86efac;
+}
+
+.mensajeError {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fca5a5;
+}
+
+.mensajeExito button,
+.mensajeError button {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+}
+
+.planesBtn {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ctaBtnAnual {
+    background: linear-gradient(to right, #4D1519, #72463b) !important;
+}

@@ -10,15 +10,15 @@ import ModalPro from '../../Components/ModalPro'
 
 export default function Aleatoria() {
 
-  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const isPro = user.is_pro === true || user.is_pro === 1
 
-  const [pelicula,           setPelicula]           = useState(null)
-  const [girando,            setGirando]            = useState(false)
-  const [esFavorita,         setEsFavorita]         = useState(false)
+  const [pelicula, setPelicula] = useState(null)
+  const [girando, setGirando] = useState(false)
+  const [esFavorita, setEsFavorita] = useState(false)
   const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
   const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
-  const [modalPro,           setModalPro]           = useState(false)
+  const [modalPro, setModalPro] = useState(false)
   const audioRef = useRef(null)
 
   function lanzarDado() {
@@ -26,7 +26,7 @@ export default function Aleatoria() {
     setGirando(true)
     if (audioRef.current) {
       audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {})
+      audioRef.current.play().catch(() => { })
     }
     setTimeout(() => {
       api.get('/movies/random')
@@ -125,11 +125,11 @@ export default function Aleatoria() {
                   }
                   <h2 className={styles.peliculaTitulo}>{pelicula.title}</h2>
                   <p className={styles.peliculaMeta}>{pelicula.anio} · {pelicula.genre}</p>
-                  <div className={styles.stars}>
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
-                    ))}
-                  </div>
+                  {/*<div className={styles.stars}>
+            {Array.from({ length: 6}).map((_, i) => (
+              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
+            ))}
+          </div>*/}
                 </div>
 
                 <div className={styles.sinopsisPanel}>

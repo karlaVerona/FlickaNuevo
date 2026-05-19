@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\UserGenreController;
 use App\Http\Controllers\Api\StatsController;
+use App\Http\Controllers\Api\SubscriptionController;
+
 
 // Admin
 use App\Http\Controllers\Admin\AdminStatsController;
@@ -75,6 +77,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/movies',          [MovieController::class, 'index']);
     Route::get('/movies/genres', [MovieController::class, 'genres']);
 
+    // Suscripción
+    Route::get('/subscription',    [SubscriptionController::class, 'index']);
+    Route::post('/subscription',   [SubscriptionController::class, 'store']);
+    Route::delete('/subscription', [SubscriptionController::class, 'destroy']);
     // Estadísticas
     Route::get('/stats', [StatsController::class, 'index']);
 });

@@ -13,30 +13,30 @@ import api from '@/lib/axios'
 const SECCIONES = [
   { key: 'recientes', titulo: '🎬 Agregadas recientemente' },
   { key: 'valoradas', titulo: '🏆 Las mejor valoradas' },
-  { key: 'familia',   titulo: '👨‍👩‍👧 Modo familia activado' },
-  { key: 'comedia',   titulo: '🎪 Noche de carcajadas' },
-  { key: 'terror',    titulo: '😭 Las de terror...' },
+  { key: 'familia', titulo: '👨‍👩‍👧 Modo familia activado' },
+  { key: 'comedia', titulo: '🎪 Noche de carcajadas' },
+  { key: 'terror', titulo: '😭 Las de terror...' },
   { key: 'romantica', titulo: '❤️ Mariposas en el estómago' },
-  { key: 'miedo',     titulo: '😱 Si te atreves...' },
-  { key: 'scifi',     titulo: '🚀 Fuera de este mundo' },
-  { key: 'musical',   titulo: '🎵 A todo volumen' },
-  { key: 'drama',     titulo: '🥀 Grandes historias' },
-  { key: 'accion',    titulo: '⚡ Al filo del asiento' },
+  { key: 'miedo', titulo: '😱 Si te atreves...' },
+  { key: 'scifi', titulo: '🚀 Fuera de este mundo' },
+  { key: 'musical', titulo: '🎵 A todo volumen' },
+  { key: 'drama', titulo: '🥀 Grandes historias' },
+  { key: 'accion', titulo: '⚡ Al filo del asiento' },
 ]
 
 export default function Peliculas() {
 
-  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const isPro = user.is_pro === true || user.is_pro === 1
 
-  const [secciones,          setSecciones]          = useState({})
-  const [cargando,           setCargando]           = useState(true)
+  const [secciones, setSecciones] = useState({})
+  const [cargando, setCargando] = useState(true)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
   const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
   const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
-  const [favIds,             setFavIds]             = useState(new Set())
-  const [favMap,             setFavMap]             = useState({})
-  const [modalPro,           setModalPro]           = useState(false)
+  const [favIds, setFavIds] = useState(new Set())
+  const [favMap, setFavMap] = useState({})
+  const [modalPro, setModalPro] = useState(false)
 
   useEffect(() => {
     const requests = [api.get('/movies/sections')]
@@ -80,7 +80,7 @@ export default function Peliculas() {
   function abrirModalResena() {
     api.get('/my-reviews')
       .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setModalResenaAbierto(true))
   }
 
@@ -186,11 +186,11 @@ function MovieCard({ pelicula, esFavorita, isPro, onToggleFavorito, onVerDetalle
         <div className={styles.movieTitle}>{pelicula.title}</div>
         <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genre}</div>
         <div className={styles.movieActions}>
-          <div className={styles.stars}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
+          {/*<div className={styles.stars}>
+            {Array.from({ length: 6}).map((_, i) => (
+              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
             ))}
-          </div>
+          </div>*/}
           <button
             className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''} ${!isPro ? styles.favBtnBloqueado : ''}`}
             onClick={e => { e.stopPropagation(); onToggleFavorito() }}

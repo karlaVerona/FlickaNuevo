@@ -270,11 +270,11 @@ function MovieCard({ pelicula, esFavorita, isPro, onToggleFavorito, onVerDetalle
         <div className={styles.movieTitle}>{pelicula.title}</div>
         <div className={styles.movieMeta}>{pelicula.anio} · {pelicula.genre}</div>
         <div className={styles.movieActions}>
-          <div className={styles.stars}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
+          {/*<div className={styles.stars}>
+            {Array.from({ length: 6}).map((_, i) => (
+              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
             ))}
-          </div>
+          </div>*/}
           <button
             className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''} ${!isPro ? styles.favBtnBloqueado : ''}`}
             onClick={e => { e.stopPropagation(); onToggleFavorito() }}

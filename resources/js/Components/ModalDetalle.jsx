@@ -32,11 +32,11 @@ export default function ModalDetalle({ pelicula, esFavorita, onToggleFavorito, o
           <div className={styles.meta}>
             <h2 className={styles.titulo}>{pelicula.title}</h2>
             <p className={styles.metaLine}>{pelicula.anio} · {pelicula.genre}</p>
-            <div className={styles.stars}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i}>{i < pelicula.rating ? '★' : '☆'}</span>
-              ))}
-            </div>
+            {/*<div className={styles.stars}>
+            {Array.from({ length: 6}).map((_, i) => (
+              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
+            ))}
+          </div>*/}
           </div>
 
           <div className={styles.acciones}>

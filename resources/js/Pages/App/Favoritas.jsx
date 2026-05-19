@@ -234,11 +234,7 @@ function MovieCard({ pelicula, onVerDetalle, onQuitarFavorita }) {
         <div className={styles.cardTitulo}>{pelicula?.title}</div>
         <div className={styles.cardMeta}>{pelicula?.anio} · {pelicula?.genre}</div>
         <div className={styles.cardAcciones}>
-          <div className={styles.stars}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i}>{i < (pelicula?.rating ?? 0) ? '★' : '☆'}</span>
-            ))}
-          </div>
+          
           <button
             className={styles.quitarBtn}
             onClick={e => { e.stopPropagation(); onQuitarFavorita() }}
