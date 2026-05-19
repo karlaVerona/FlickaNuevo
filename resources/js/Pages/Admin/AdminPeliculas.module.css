@@ -1,0 +1,504 @@
+/* CSS compartido para todas las páginas admin */
+
+.content {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    background: #f5f0ea;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid rgb(138, 111, 34);
+}
+
+.pageTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a0a0a;
+}
+
+.pageSubtitle {
+    font-size: 0.9rem;
+    color: rgb(138, 111, 34);
+    margin-top: 0.25rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.crearBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: #4a9a8a;
+    color: #fff;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.crearBtn:hover { background: #3a8070; }
+
+/* ── BUSCADOR ── */
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #301413;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1.25rem;
+    max-width: 420px;
+}
+
+.searchIcon { color: rgb(255, 226, 147); flex-shrink: 0; }
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #fff;
+}
+
+.searchInput::placeholder { color: rgb(239, 207, 120); }
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.searchClear:hover { color: #e07070; }
+
+/* ── TABLA ── */
+.tableWrapper {
+    background: #2a1010;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead tr {
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.table th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+}
+
+.table td {
+    padding: 0.7rem 1rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.75);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+
+.table tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+.tdTitulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    color: #e8d5b0 !important;
+}
+
+.miniPoster {
+    width: 28px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.tdAcciones {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
+}
+
+.editBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(201,168,76,0.3);
+    background: rgba(201,168,76,0.08);
+    color: #c9a84c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.editBtn:hover { background: rgba(201,168,76,0.2); }
+
+.deleteBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(139,26,26,0.3);
+    background: rgba(139,26,26,0.08);
+    color: #e07070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.deleteBtn:hover { background: rgba(139,26,26,0.2); }
+
+/* ── BADGES ── */
+.badgePro {
+    padding: 0.2rem 0.6rem;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #c9a84c;
+    letter-spacing: 0.08em;
+}
+
+.badgeFree {
+    padding: 0.2rem 0.6rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.4);
+}
+
+/* ── PAGINACIÓN ── */
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.25rem 0 0.5rem;
+}
+
+.pageBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #2a1010;
+    color: rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.pageBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+.pageBtn:not(:disabled):hover { background: rgba(255,255,255,0.08); }
+
+.pageInfo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(26,10,10,0.5);
+}
+
+/* ── RESEÑAS ── */
+.tdResena {
+    max-width: 280px;
+    font-size: 0.85rem !important;
+    color: rgba(255,255,255,0.5) !important;
+}
+
+.ratingCell {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #c9a84c !important;
+    font-weight: 600;
+}
+
+.sixStarBadge {
+    padding: 0.1rem 0.4rem;
+    background: rgba(201,168,76,0.2);
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.62rem;
+    color: #c9a84c;
+}
+
+/* ── USUARIOS ── */
+.userAvatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #8b1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ── MODALES ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: 500px;
+    max-width: 92vw;
+    max-height: 88vh;
+    background: #2a1010;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    flex-shrink: 0;
+}
+
+.modalTitulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.cerrarBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(20,5,5,0.8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.cerrarBtn:hover { background: #8b1a1a; }
+
+.modalBody {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ae8c5f52 transparent;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+}
+
+.input {
+    background: #4a2820;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus { border-color: rgba(201,168,76,0.5); }
+.input::placeholder { color: rgba(255,255,255,0.2); }
+
+.textarea {
+    background: #4a2820;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #fff;
+    outline: none;
+    resize: vertical;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+}
+
+.textarea:focus { border-color: rgba(201,168,76,0.5); }
+
+.errorMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.8rem;
+    color: #e07070;
+}
+
+.cancelarBtn {
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cancelarBtn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+.guardarBtn {
+    padding: 0.6rem 1.4rem;
+    background: #4a9a8a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.guardarBtn:hover:not(:disabled) { background: #3a8070; }
+.guardarBtn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* ── MODAL USUARIO ── */
+.userModalInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    margin-bottom: 0.25rem;
+}
+
+.userModalInfo strong {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    color: #e8d5b0;
+}
+
+.userModalInfo span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.toggleRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggleBtn {
+    flex: 1;
+    padding: 0.6rem;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.toggleBtn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+
+.toggleBtnActivo {
+    background: rgba(74,154,138,0.2);
+    border-color: #4a9a8a;
+    color: #4a9a8a;
+    font-weight: 600;
+}
+
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26,10,10,0.4);
+    text-align: center;
+    padding: 4rem 0;
+}

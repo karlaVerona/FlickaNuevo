@@ -267,3 +267,8 @@
     opacity: 0.65;
     cursor: not-allowed;
 }
+
+.estrellaDeshabilitada {
+    opacity: 0.25;
+    cursor: not-allowed;
+}

@@ -8,6 +8,9 @@ import ModalExito from './ModalExito'
 
 export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstrellas }) {
 
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
   const [form, setForm] = useState({
     rating:      0,
     review_text: '',
@@ -26,6 +29,10 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
   }
 
   function handleStarClick(valor) {
+    if (valor === 6 && !isPro) {
+      setAlertaSeis(true)
+      return
+    }
     if (valor === 6 && tieneSeisEstrellas) {
       setAlertaSeis(true)
       return
@@ -54,7 +61,6 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
         is_six_star: form.rating === 6,
       })
 
-      // Muestra el modal de éxito en lugar de cerrar directamente
       setExitoVisible(true)
 
     } catch (error) {
@@ -92,7 +98,10 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
 
           {alertaSeis && (
             <div className={styles.alertaSeis}>
-              Solo se permite una reseña de 6 estrellas en el perfil
+              {!isPro
+                ? 'La calificación de 6 estrellas es exclusiva del plan PRO'
+                : 'Solo se permite una reseña de 6 estrellas en el perfil'
+              }
             </div>
           )}
 
@@ -100,22 +109,35 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             <div className={styles.errorGeneral}>{errores.general}</div>
           )}
 
+          {/* Calificación */}
           <div className={styles.campo}>
             <label className={styles.label}>Calificación</label>
             <div className={styles.estrellas}>
               {Array.from({ length: 6 }).map((_, i) => {
-                const valor = i + 1
+                const valor  = i + 1
                 const activa = valor <= estrellaActiva
                 const esSeis = valor === 6
+                const bloqueada = esSeis && !isPro
                 return (
                   <button
                     key={valor}
                     type="button"
-                    className={`${styles.estrella} ${activa ? styles.estrellaActiva : ''} ${esSeis ? styles.estrellaSeis : ''}`}
+                    className={`
+                      ${styles.estrella}
+                      ${activa    ? styles.estrellaActiva      : ''}
+                      ${esSeis    ? styles.estrellaSeis        : ''}
+                      ${bloqueada ? styles.estrellaDeshabilitada : ''}
+                    `}
                     onClick={() => handleStarClick(valor)}
-                    onMouseEnter={() => setHoverRating(valor)}
+                    onMouseEnter={() => !bloqueada && setHoverRating(valor)}
                     onMouseLeave={() => setHoverRating(0)}
-                    title={esSeis ? 'Reseña destacada de 6 estrellas (solo una en tu perfil)' : `${valor} estrellas`}
+                    title={
+                      bloqueada
+                        ? 'Exclusivo PRO'
+                        : esSeis
+                          ? 'Reseña destacada de 6 estrellas (solo una en tu perfil)'
+                          : `${valor} estrellas`
+                    }
                   >
                     ★
                   </button>
@@ -130,6 +152,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             {errores.rating && <span className={styles.error}>{errores.rating}</span>}
           </div>
 
+          {/* Mood */}
           <div className={styles.campo}>
             <label className={styles.label}>Mood</label>
             <div className={styles.moodGrid}>
@@ -147,6 +170,7 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
             {errores.mood && <span className={styles.error}>{errores.mood}</span>}
           </div>
 
+          {/* Texto */}
           <div className={styles.campo}>
             <label className={styles.label}>Tu reseña</label>
             <textarea
@@ -172,7 +196,6 @@ export default function ModalResena({ pelicula, onCerrar, onExito, tieneSeisEstr
         </form>
       </div>
 
-      
       {exitoVisible && createPortal(
         <ModalExito
           onAceptar={() => {

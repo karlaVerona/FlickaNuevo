@@ -8,50 +8,57 @@ import { ORDENAR } from './Busqueda.helpers.js'
 import api from '@/lib/axios'
 import ModalResena from '../../Components/ModalResena'
 import ModalDetalle from '../../Components/ModalDetalle'
+import ModalPro from '../../Components/ModalPro'
 
 const OPCIONES_ANIO = [
   { label: 'Más reciente', value: 'mas_reciente' },
-  { label: 'Más antigua', value: 'mas_antigua' },
+  { label: 'Más antigua',  value: 'mas_antigua'  },
 ]
 
 export default function Busqueda() {
 
-  const [busqueda, setBusqueda] = useState('')
-  const [filtroGenero, setFiltroGenero] = useState(null)
-  const [filtroAnio, setFiltroAnio] = useState(null)
-  const [filtroOrden, setFiltroOrden] = useState(null)
-  const [dropdownAbierto, setDropdownAbierto] = useState(null)
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
+  const [busqueda,           setBusqueda]           = useState('')
+  const [filtroGenero,       setFiltroGenero]       = useState(null)
+  const [filtroAnio,         setFiltroAnio]         = useState(null)
+  const [filtroOrden,        setFiltroOrden]        = useState(null)
+  const [dropdownAbierto,    setDropdownAbierto]    = useState(null)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
-  const [peliculas, setPeliculas] = useState([])
-  const [generos, setGeneros] = useState([])
-  const [cargando, setCargando] = useState(true)
+  const [peliculas,          setPeliculas]          = useState([])
+  const [generos,            setGeneros]            = useState([])
+  const [cargando,           setCargando]           = useState(true)
   const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
   const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
-  const [favIds, setFavIds] = useState(new Set())
-  const [favMap, setFavMap] = useState({})
+  const [favIds,             setFavIds]             = useState(new Set())
+  const [favMap,             setFavMap]             = useState({})
+  const [modalPro,           setModalPro]           = useState(false)
 
-  // Carga géneros y favoritas al montar
   useEffect(() => {
-    Promise.all([
-      api.get('/movies/genres'),
-      api.get('/favorites'),
-    ]).then(([genRes, favRes]) => {
-      setGeneros(genRes.data)
-      const ids = new Set(favRes.data.favorites.map(f => f.movie_id))
-      const map = {}
-      favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
-      setFavIds(ids)
-      setFavMap(map)
-    }).catch(() => { })
+    const requests = [api.get('/movies/genres')]
+    if (isPro) requests.push(api.get('/favorites'))
+
+    Promise.all(requests)
+      .then(([genRes, favRes]) => {
+        setGeneros(genRes.data)
+        if (favRes) {
+          const ids = new Set(favRes.data.favorites.map(f => f.movie_id))
+          const map = {}
+          favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
+          setFavIds(ids)
+          setFavMap(map)
+        }
+      })
+      .catch(() => {})
   }, [])
 
-  // Busca películas cuando cambian los filtros
   useEffect(() => {
     const params = {}
-    if (busqueda) params.search = busqueda
+    if (busqueda)    params.search = busqueda
     if (filtroGenero) params.genre = filtroGenero
-    if (filtroAnio) params.anio = filtroAnio
-    if (filtroOrden) params.orden = filtroOrden
+    if (filtroAnio)   params.anio  = filtroAnio
+    if (filtroOrden)  params.orden = filtroOrden
 
     setCargando(true)
     api.get('/movies', { params })
@@ -65,6 +72,7 @@ export default function Busqueda() {
   }
 
   function toggleFavorito(movieId) {
+    if (!isPro) { setModalPro(true); return }
     if (favIds.has(movieId)) {
       const favId = favMap[movieId]
       api.delete(`/favorites/${favId}`)
@@ -86,19 +94,17 @@ export default function Busqueda() {
   function abrirModalResena() {
     api.get('/my-reviews')
       .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setModalResenaAbierto(true))
   }
 
   return (
     <div className={styles.page}>
-
       <img src={fondo} alt="" className={styles.bgImage} />
       <Sidebar active="busqueda" />
 
       <div className={styles.mainColumn}>
         <TopBar />
-
         <main className={styles.content}>
 
           <div className={styles.pageHeader}>
@@ -126,7 +132,6 @@ export default function Busqueda() {
             <div className={styles.filtros}>
               <span className={styles.filtrosLabel}>Filtrar por:</span>
 
-              {/* Género — dinámico desde la BD */}
               <div className={styles.dropdown}>
                 <button
                   className={`${styles.dropdownBtn} ${filtroGenero ? styles.dropdownBtnActivo : ''}`}
@@ -152,7 +157,6 @@ export default function Busqueda() {
                 )}
               </div>
 
-              {/* Año — más reciente / más antigua */}
               <div className={styles.dropdown}>
                 <button
                   className={`${styles.dropdownBtn} ${filtroAnio ? styles.dropdownBtnActivo : ''}`}
@@ -179,7 +183,6 @@ export default function Busqueda() {
                 )}
               </div>
 
-              {/* Valoración */}
               <div className={styles.dropdown}>
                 <button
                   className={`${styles.dropdownBtn} ${filtroOrden ? styles.dropdownBtnActivo : ''}`}
@@ -216,6 +219,7 @@ export default function Busqueda() {
                     key={pelicula.id}
                     pelicula={pelicula}
                     esFavorita={favIds.has(pelicula.id)}
+                    isPro={isPro}
                     onToggleFavorito={() => toggleFavorito(pelicula.id)}
                     onVerDetalle={() => setPeliculaSeleccionada(pelicula)}
                   />
@@ -242,18 +246,20 @@ export default function Busqueda() {
           pelicula={peliculaSeleccionada}
           tieneSeisEstrellas={tieneSeisEstrellas}
           onCerrar={() => setModalResenaAbierto(false)}
-          onExito={() => {
-            setModalResenaAbierto(false)
-            setPeliculaSeleccionada(null)
-          }}
+          onExito={() => { setModalResenaAbierto(false); setPeliculaSeleccionada(null) }}
         />
       )}
 
+      {modalPro && (
+        <ModalPro
+          onAceptar={() => setModalPro(false)}
+        />
+      )}
     </div>
   )
 }
 
-function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
+function MovieCard({ pelicula, esFavorita, isPro, onToggleFavorito, onVerDetalle }) {
   return (
     <div className={styles.movieCard} onClick={onVerDetalle}>
       {pelicula.poster
@@ -270,9 +276,9 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
             ))}
           </div>
           <button
-            className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
+            className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''} ${!isPro ? styles.favBtnBloqueado : ''}`}
             onClick={e => { e.stopPropagation(); onToggleFavorito() }}
-            title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
+            title={!isPro ? 'Exclusivo PRO' : esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
           >
             {esFavorita ? '♥' : '♡'}
           </button>

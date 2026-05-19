@@ -222,3 +222,13 @@
     text-align: center;
     padding: 4rem 2.5rem;
 }
+
+.limiteIndicador {
+    background: rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    margin-left: 0.25rem;
+}

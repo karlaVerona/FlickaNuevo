@@ -223,3 +223,8 @@
     text-align: center;
     padding: 4rem 2.5rem;
 }
+
+.favBtnBloqueado {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

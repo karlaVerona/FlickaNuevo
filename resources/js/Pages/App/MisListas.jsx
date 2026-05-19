@@ -8,13 +8,20 @@ import styles from './MisListas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import api from '@/lib/axios'
 import ModalCrearLista from '../../Components/ModalCrearLista'
+import ModalPro from '../../Components/ModalPro'
+
+const LIMITE_GRATIS = 3
 
 export default function MisListas() {
 
-  const [listas, setListas] = useState([])
-  const [cargando, setCargando] = useState(true)
-  const [busqueda, setBusqueda] = useState('')
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
+  const [listas,    setListas]    = useState([])
+  const [cargando,  setCargando]  = useState(true)
+  const [busqueda,  setBusqueda]  = useState('')
   const [modalCrear, setModalCrear] = useState(false)
+  const [modalPro,   setModalPro]   = useState(false)
 
   useEffect(() => {
     api.get('/lists')
@@ -22,6 +29,15 @@ export default function MisListas() {
       .catch(err => console.error(err))
       .finally(() => setCargando(false))
   }, [])
+
+  function handleAgregarLista() {
+    // Si no es PRO y ya tiene 3 o más listas, muestra el modal PRO
+    if (!isPro && listas.length >= LIMITE_GRATIS) {
+      setModalPro(true)
+      return
+    }
+    setModalCrear(true)
+  }
 
   function eliminarLista(e, id) {
     e.stopPropagation()
@@ -39,14 +55,13 @@ export default function MisListas() {
     l.name.toLowerCase().includes(busqueda.toLowerCase())
   )
 
-
   return (
     <div className={styles.page}>
       <img src={fondo} alt="" className={styles.bgImage} />
       <Sidebar active="listas" />
 
       <div className={styles.mainColumn}>
-        <TopBar username="Usuario" plan="Flicka PRO" />
+        <TopBar />
 
         <main className={styles.content}>
 
@@ -71,9 +86,16 @@ export default function MisListas() {
                 </button>
               )}
             </div>
-            <button className={styles.crearBtn} onClick={() => setModalCrear(true)}>
+
+            <button className={styles.crearBtn} onClick={handleAgregarLista}>
               <Plus size={16} />
               Agregar lista
+              {/* Indicador visual si está cerca del límite */}
+              {!isPro && (
+                <span className={styles.limiteIndicador}>
+                  {listas.length}/{LIMITE_GRATIS}
+                </span>
+              )}
             </button>
           </div>
 
@@ -122,6 +144,12 @@ export default function MisListas() {
         <ModalCrearLista
           onCerrar={() => setModalCrear(false)}
           onCreada={onListaCreada}
+        />
+      )}
+
+      {modalPro && (
+        <ModalPro
+          onAceptar={() => setModalPro(false)}
         />
       )}
 

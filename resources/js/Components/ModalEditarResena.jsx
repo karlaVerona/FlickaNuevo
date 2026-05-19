@@ -1,34 +1,27 @@
 import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import api from '@/lib/axios'
-import styles from './ModalResena.module.css'  // reutiliza los mismos estilos
+import styles from './ModalResena.module.css'
 import { MOODS, validarResena } from './Modalresena.helpers.js'
 import ModalExito from './ModalExito'
 
-/*
-  Props:
-    - resena: objeto con los datos actuales { id, rating, review_text, mood, is_six_star, movie }
-    - onCerrar: cierra solo este modal
-    - onExito: cierra este modal + el ModalResenaDetalle
-    - tieneSeisEstrellas: boolean — si el usuario ya tiene una reseña de 6 estrellas
-      (distinta a la que se está editando)
-*/
 export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeisEstrellas }) {
 
-  // Precarga el formulario con los datos actuales de la reseña
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
   const [form, setForm] = useState({
     rating:      resena.rating,
     review_text: resena.review_text,
     mood:        resena.mood,
   })
 
-  const [errores,      setErrores]      = useState({})
-  const [enviando,     setEnviando]     = useState(false)
-  const [alertaSeis,   setAlertaSeis]   = useState(false)
-  const [exitoVisible, setExitoVisible] = useState(false)
-  const [hoverRating,  setHoverRating]  = useState(0)
-  const [resenaActualizada, setResenaActualizada] = useState(null)
+  const [errores,           setErrores]           = useState({})
+  const [enviando,          setEnviando]           = useState(false)
+  const [alertaSeis,        setAlertaSeis]         = useState(false)
+  const [exitoVisible,      setExitoVisible]       = useState(false)
+  const [hoverRating,       setHoverRating]        = useState(0)
+  const [resenaActualizada, setResenaActualizada]  = useState(null)
 
   function handleChange(campo, valor) {
     setForm(prev => ({ ...prev, [campo]: valor }))
@@ -36,8 +29,10 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
   }
 
   function handleStarClick(valor) {
-    // Solo bloquea si intenta poner 6 estrellas Y ya tiene otra reseña de 6
-    // (no bloquea si la reseña actual YA es de 6 estrellas)
+    if (valor === 6 && !isPro) {
+      setAlertaSeis(true)
+      return
+    }
     if (valor === 6 && tieneSeisEstrellas && !resena.is_six_star) {
       setAlertaSeis(true)
       return
@@ -59,15 +54,14 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
 
     try {
       const response = await api.put(`/reviews/${resena.id}`, {
-      rating:      form.rating,
-      review_text: form.review_text,
-      mood:        form.mood,
-      is_six_star: form.rating === 6,
-  })
+        rating:      form.rating,
+        review_text: form.review_text,
+        mood:        form.mood,
+        is_six_star: form.rating === 6,
+      })
 
-    setResenaActualizada(response.data.review)
-    setExitoVisible(true)
-
+      setResenaActualizada(response.data.review)
+      setExitoVisible(true)
 
     } catch (error) {
       if (error.response?.status === 422) {
@@ -104,7 +98,10 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
 
           {alertaSeis && (
             <div className={styles.alertaSeis}>
-              Solo se permite una reseña de 6 estrellas en el perfil
+              {!isPro
+                ? 'La calificación de 6 estrellas es exclusiva del plan PRO'
+                : 'Solo se permite una reseña de 6 estrellas en el perfil'
+              }
             </div>
           )}
 
@@ -117,18 +114,30 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
             <label className={styles.label}>Calificación</label>
             <div className={styles.estrellas}>
               {Array.from({ length: 6 }).map((_, i) => {
-                const valor = i + 1
-                const activa = valor <= estrellaActiva
-                const esSeis = valor === 6
+                const valor    = i + 1
+                const activa   = valor <= estrellaActiva
+                const esSeis   = valor === 6
+                const bloqueada = esSeis && !isPro
                 return (
                   <button
                     key={valor}
                     type="button"
-                    className={`${styles.estrella} ${activa ? styles.estrellaActiva : ''} ${esSeis ? styles.estrellaSeis : ''}`}
+                    className={`
+                      ${styles.estrella}
+                      ${activa    ? styles.estrellaActiva        : ''}
+                      ${esSeis    ? styles.estrellaSeis          : ''}
+                      ${bloqueada ? styles.estrellaDeshabilitada : ''}
+                    `}
                     onClick={() => handleStarClick(valor)}
-                    onMouseEnter={() => setHoverRating(valor)}
+                    onMouseEnter={() => !bloqueada && setHoverRating(valor)}
                     onMouseLeave={() => setHoverRating(0)}
-                    title={esSeis ? 'Reseña destacada de 6 estrellas' : `${valor} estrellas`}
+                    title={
+                      bloqueada
+                        ? 'Exclusivo PRO'
+                        : esSeis
+                          ? 'Reseña destacada de 6 estrellas'
+                          : `${valor} estrellas`
+                    }
                   >
                     ★
                   </button>
@@ -187,14 +196,14 @@ export default function ModalEditarResena({ resena, onCerrar, onExito, tieneSeis
         </form>
       </div>
 
-         {exitoVisible && (
-    <ModalExito
-        onAceptar={() => {
+      {exitoVisible && (
+        <ModalExito
+          onAceptar={() => {
             setExitoVisible(false)
             onExito?.(resenaActualizada)
-        }}
-    />
-)}
+          }}
+        />
+      )}
     </>
   )
 }

@@ -4,6 +4,7 @@ import Sidebar from '../../Components/Sidebar'
 import TopBar from '../../Components/TopBar'
 import ModalDetalle from '../../Components/ModalDetalle'
 import ModalResena from '../../Components/ModalResena'
+import ModalPro from '../../Components/ModalPro'
 import styles from './Peliculas.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import { scrollCarrusel, dragProps } from './Peliculas.helpers.js'
@@ -12,45 +13,52 @@ import api from '@/lib/axios'
 const SECCIONES = [
   { key: 'recientes', titulo: '🎬 Agregadas recientemente' },
   { key: 'valoradas', titulo: '🏆 Las mejor valoradas' },
-  { key: 'familia', titulo: '👨‍👩‍👧 Modo familia activado' },
-  { key: 'comedia', titulo: '🎪 Noche de carcajadas' },
-  { key: 'terror', titulo: '😭 Las de terror...' },
+  { key: 'familia',   titulo: '👨‍👩‍👧 Modo familia activado' },
+  { key: 'comedia',   titulo: '🎪 Noche de carcajadas' },
+  { key: 'terror',    titulo: '😭 Las de terror...' },
   { key: 'romantica', titulo: '❤️ Mariposas en el estómago' },
-  { key: 'miedo', titulo: '😱 Si te atreves...' },
-  { key: 'scifi', titulo: '🚀 Fuera de este mundo' },
-  { key: 'musical', titulo: '🎵 A todo volumen' },
-  { key: 'drama', titulo: '🥀 Grandes historias' },
-  { key: 'accion', titulo: '⚡ Al filo del asiento' },
+  { key: 'miedo',     titulo: '😱 Si te atreves...' },
+  { key: 'scifi',     titulo: '🚀 Fuera de este mundo' },
+  { key: 'musical',   titulo: '🎵 A todo volumen' },
+  { key: 'drama',     titulo: '🥀 Grandes historias' },
+  { key: 'accion',    titulo: '⚡ Al filo del asiento' },
 ]
 
 export default function Peliculas() {
 
-  const [secciones, setSecciones] = useState({})
-  const [cargando, setCargando] = useState(true)
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
+  const [secciones,          setSecciones]          = useState({})
+  const [cargando,           setCargando]           = useState(true)
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null)
   const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
   const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
-  const [favIds, setFavIds] = useState(new Set())
-  const [favMap, setFavMap] = useState({})
+  const [favIds,             setFavIds]             = useState(new Set())
+  const [favMap,             setFavMap]             = useState({})
+  const [modalPro,           setModalPro]           = useState(false)
 
   useEffect(() => {
-    Promise.all([
-      api.get('/movies/sections'),
-      api.get('/favorites'),
-    ])
+    const requests = [api.get('/movies/sections')]
+    if (isPro) requests.push(api.get('/favorites'))
+
+    Promise.all(requests)
       .then(([secRes, favRes]) => {
         setSecciones(secRes.data)
-        const ids = new Set(favRes.data.favorites.map(f => f.movie_id))
-        const map = {}
-        favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
-        setFavIds(ids)
-        setFavMap(map)
+        if (favRes) {
+          const ids = new Set(favRes.data.favorites.map(f => f.movie_id))
+          const map = {}
+          favRes.data.favorites.forEach(f => { map[f.movie_id] = f.id })
+          setFavIds(ids)
+          setFavMap(map)
+        }
       })
       .catch(err => console.error(err))
       .finally(() => setCargando(false))
   }, [])
 
   function toggleFavorito(movieId) {
+    if (!isPro) { setModalPro(true); return }
     if (favIds.has(movieId)) {
       const favId = favMap[movieId]
       api.delete(`/favorites/${favId}`)
@@ -72,20 +80,17 @@ export default function Peliculas() {
   function abrirModalResena() {
     api.get('/my-reviews')
       .then(res => setTieneSeisEstrellas(res.data.some(r => r.is_six_star)))
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setModalResenaAbierto(true))
   }
 
-
   return (
     <div className={styles.page}>
-
       <img src={fondo} alt="" className={styles.bgImage} />
       <Sidebar active="peliculas" />
 
       <div className={styles.mainColumn}>
         <TopBar />
-
         <main className={styles.content}>
           <div className={styles.pageHeader}>
             <h1 className={styles.pageTitle}>Catálogo de películas</h1>
@@ -103,6 +108,7 @@ export default function Peliculas() {
                   titulo={seccion.titulo}
                   peliculas={peliculas}
                   favIds={favIds}
+                  isPro={isPro}
                   onToggleFavorito={toggleFavorito}
                   onVerDetalle={setPeliculaSeleccionada}
                 />
@@ -127,18 +133,20 @@ export default function Peliculas() {
           pelicula={peliculaSeleccionada}
           tieneSeisEstrellas={tieneSeisEstrellas}
           onCerrar={() => setModalResenaAbierto(false)}
-          onExito={() => {
-            setModalResenaAbierto(false)
-            setPeliculaSeleccionada(null)
-          }}
+          onExito={() => { setModalResenaAbierto(false); setPeliculaSeleccionada(null) }}
         />
       )}
 
+      {modalPro && (
+        <ModalPro
+          onAceptar={() => setModalPro(false)}
+        />
+      )}
     </div>
   )
 }
 
-function Carrusel({ titulo, peliculas, favIds, onToggleFavorito, onVerDetalle }) {
+function Carrusel({ titulo, peliculas, favIds, isPro, onToggleFavorito, onVerDetalle }) {
   const ref = useRef(null)
   return (
     <section className={styles.section}>
@@ -153,6 +161,7 @@ function Carrusel({ titulo, peliculas, favIds, onToggleFavorito, onVerDetalle })
               key={pelicula.id}
               pelicula={pelicula}
               esFavorita={favIds.has(pelicula.id)}
+              isPro={isPro}
               onToggleFavorito={() => onToggleFavorito(pelicula.id)}
               onVerDetalle={() => onVerDetalle(pelicula)}
             />
@@ -166,7 +175,7 @@ function Carrusel({ titulo, peliculas, favIds, onToggleFavorito, onVerDetalle })
   )
 }
 
-function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
+function MovieCard({ pelicula, esFavorita, isPro, onToggleFavorito, onVerDetalle }) {
   return (
     <div className={styles.movieCard} onClick={onVerDetalle}>
       {pelicula.poster
@@ -183,9 +192,9 @@ function MovieCard({ pelicula, esFavorita, onToggleFavorito, onVerDetalle }) {
             ))}
           </div>
           <button
-            className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
+            className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''} ${!isPro ? styles.favBtnBloqueado : ''}`}
             onClick={e => { e.stopPropagation(); onToggleFavorito() }}
-            title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
+            title={!isPro ? 'Exclusivo PRO' : esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
           >
             {esFavorita ? '♥' : '♡'}
           </button>

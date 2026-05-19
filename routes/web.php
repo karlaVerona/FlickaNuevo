@@ -35,6 +35,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
 });
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', fn() => Inertia::render('Admin/AdminDashboard'))->name('admin.dashboard');
+    Route::get('/admin/peliculas', fn() => Inertia::render('Admin/AdminPeliculas'))->name('admin.peliculas');
+    Route::get('/admin/usuarios',  fn() => Inertia::render('Admin/AdminUsuarios'))->name('admin.usuarios');
+    Route::get('/admin/resenas',   fn() => Inertia::render('Admin/AdminResenas'))->name('admin.resenas');
+    Route::get('/admin/login',     fn() => Inertia::render('Admin/AdminLogin'))->name('admin.login');
+});
+
+Route::get('/admin/login', fn() => Inertia::render('Admin/AdminLogin'))->name('admin.login');
 
 require __DIR__ . '/auth.php';

@@ -262,3 +262,8 @@
 }
 
 .resenaBtn:hover { background: #3a8070; }
+
+.favBtnBloqueado {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
