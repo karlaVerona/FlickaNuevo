@@ -76,7 +76,11 @@
   color: #fff;
   letter-spacing: 0.05em;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
 }
+
+.avatar:hover { opacity: 0.8; }
 
 /* Botones de icono (engranaje, moneda) */
 .iconBtn {

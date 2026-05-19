@@ -42,10 +42,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile',          [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/photo',   [ProfileController::class, 'updatePhoto']);
+    Route::post('/profile/banner',  [ProfileController::class, 'updateBanner']);  
+    Route::put('/profile/color',    [ProfileController::class, 'updateColor']);   
 
     // Géneros favoritos
     Route::get('/profile/genres',  [UserGenreController::class, 'index']);
     Route::post('/profile/genres', [UserGenreController::class, 'store']);
+    
 
     // Reseñas
     Route::post('/reviews',        [ReviewController::class, 'store']);
@@ -71,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/movies/random',   [MovieController::class, 'random']);
     Route::get('/movies',          [MovieController::class, 'index']);
     Route::get('/movies/genres', [MovieController::class, 'genres']);
-    
+
     // Estadísticas
     Route::get('/stats', [StatsController::class, 'index']);
 });
@@ -79,7 +82,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // ─────────────────────────────────────────────
 // ADMIN
 // ─────────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+    Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/stats', [AdminStatsController::class, 'index']);
 

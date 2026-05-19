@@ -3,15 +3,16 @@ import { Settings, LogOut } from 'lucide-react'
 import axios from 'axios'
 import styles from './TopBar.module.css'
 import ModalPerfil from './ModalPerfil'
+import { router } from '@inertiajs/react'
 
 export default function TopBar() {
 
   const [modalPerfil, setModalPerfil] = useState(false)
 
-  const user     = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const username = user.username || 'Usuario'
-  const isPro    = user.is_pro === true || user.is_pro === 1
-  const plan     = isPro ? 'Flicka PRO' : 'Gratuito'
+  const isPro = user.is_pro === true || user.is_pro === 1
+  const plan = isPro ? 'Flicka PRO' : 'Gratuito'
 
   function getInitials(name) {
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
@@ -28,7 +29,7 @@ export default function TopBar() {
       await axios.post('/api/logout', {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
-    } catch {}
+    } catch { }
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     window.location.href = '/logout-web'
@@ -60,7 +61,11 @@ export default function TopBar() {
             <span className={styles.userPlan}>{plan}</span>
           </div>
 
-          <div className={styles.avatar}>
+          <div
+            className={styles.avatar}
+            onClick={() => router.visit('/perfil')}
+            title="Ver perfil"
+          >
             {user.photo
               ? <img src={user.photo} alt={username} className={styles.avatarImg} />
               : getInitials(username)

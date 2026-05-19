@@ -79,4 +79,37 @@ class ProfileController extends Controller
             'photo'   => $user->photo
         ]);
     }
+
+    public function updateBanner(Request $request)
+{
+    $request->validate([
+        'banner' => 'required|image|mimes:jpg,jpeg,png,webp|max:4096'
+    ]);
+
+    $user = $request->user();
+    $path = $request->file('banner')->store('banners', 'public');
+
+    $user->update([
+        'banner' => '/storage/' . $path
+    ]);
+
+    return response()->json([
+        'message' => 'Banner actualizado',
+        'banner'  => $user->banner
+    ]);
+}
+
+public function updateColor(Request $request)
+{
+    $request->validate([
+        'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/'
+    ]);
+
+    $request->user()->update(['color' => $request->color]);
+
+    return response()->json([
+        'message' => 'Color actualizado',
+        'color'   => $request->user()->color
+    ]);
+}
 }
