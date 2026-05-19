@@ -6,14 +6,19 @@ import styles from './Aleatoria.module.css'
 import fondo from '../../../images/fondo-paginas2.jpg'
 import api from '@/lib/axios'
 import ModalResena from '../../Components/ModalResena'
+import ModalPro from '../../Components/ModalPro'
 
 export default function Aleatoria() {
+
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
 
   const [pelicula,           setPelicula]           = useState(null)
   const [girando,            setGirando]            = useState(false)
   const [esFavorita,         setEsFavorita]         = useState(false)
   const [modalResenaAbierto, setModalResenaAbierto] = useState(false)
   const [tieneSeisEstrellas, setTieneSeisEstrellas] = useState(false)
+  const [modalPro,           setModalPro]           = useState(false)
   const audioRef = useRef(null)
 
   function lanzarDado() {
@@ -28,13 +33,14 @@ export default function Aleatoria() {
         .then(res => {
           const peli = res.data
           setPelicula(peli)
-          // Verifica si esta película ya está en favoritas
-          api.get('/favorites')
-            .then(r => {
-              const ids = r.data.favorites.map(f => f.movie_id)
-              setEsFavorita(ids.includes(peli.id))
-            })
-            .catch(() => setEsFavorita(false))
+          if (isPro) {
+            api.get('/favorites')
+              .then(r => {
+                const ids = r.data.favorites.map(f => f.movie_id)
+                setEsFavorita(ids.includes(peli.id))
+              })
+              .catch(() => setEsFavorita(false))
+          }
         })
         .catch(err => console.error(err))
         .finally(() => setGirando(false))
@@ -42,9 +48,9 @@ export default function Aleatoria() {
   }
 
   function toggleFavorito() {
+    if (!isPro) { setModalPro(true); return }
     if (!pelicula) return
     if (esFavorita) {
-      // Necesitamos el id del registro favorite, no del movie
       api.get('/favorites')
         .then(r => {
           const fav = r.data.favorites.find(f => f.movie_id === pelicula.id)
@@ -72,13 +78,11 @@ export default function Aleatoria() {
 
   return (
     <div className={styles.page}>
-
       <img src={fondo} alt="" className={styles.bgImage} />
       <Sidebar active="aleatoria" />
 
       <div className={styles.mainColumn}>
-        <TopBar username="Usuario" plan="Flicka PRO" />
-
+        <TopBar />
         <main className={styles.content}>
 
           <div className={styles.pageHeader}>
@@ -135,9 +139,9 @@ export default function Aleatoria() {
                   </div>
                   <div className={styles.acciones}>
                     <button
-                      className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''}`}
+                      className={`${styles.favBtn} ${esFavorita ? styles.favBtnActive : ''} ${!isPro ? styles.favBtnBloqueado : ''}`}
                       onClick={toggleFavorito}
-                      title={esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
+                      title={!isPro ? 'Exclusivo PRO' : esFavorita ? 'Quitar de favoritas' : 'Agregar a favoritas'}
                     >
                       {esFavorita ? '♥' : '♡'}
                     </button>
@@ -166,6 +170,11 @@ export default function Aleatoria() {
         />
       )}
 
+      {modalPro && (
+        <ModalPro
+          onAceptar={() => setModalPro(false)}
+        />
+      )}
     </div>
   )
 }

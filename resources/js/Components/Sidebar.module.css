@@ -139,3 +139,21 @@
   color: rgba(255,255,255,0.45);
   text-transform: uppercase;
 }
+
+.navItemBloqueado {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.lockBadge {
+    margin-left: auto;
+    padding: 0.1rem 0.4rem;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #c9a84c;
+    letter-spacing: 0.08em;
+}

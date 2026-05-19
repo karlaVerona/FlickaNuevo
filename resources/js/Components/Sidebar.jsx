@@ -1,43 +1,39 @@
+import { useState } from 'react'
 import { Link } from '@inertiajs/react'
 import axios from 'axios'
 import {
-  Film,
-  Search,
-  Dices,
-  ClipboardList,
-  LayoutList,
-  Heart,
-  User,
-  BarChart2,
-  CreditCard,
-  LogOut
+  Film, Search, Dices, ClipboardList, LayoutList,
+  Heart, User, BarChart2, CreditCard, LogOut
 } from 'lucide-react'
 import styles from './Sidebar.module.css'
 import logo from '../../images/logo-Flicka.jpeg'
+import ModalPro from './ModalPro'
 
 export default function Sidebar({ active = '' }) {
 
-  // Lee el usuario de localStorage para mostrar el badge correcto
   const user  = JSON.parse(localStorage.getItem('user') || '{}')
   const isPro = user.is_pro === true || user.is_pro === 1
+
+  const [modalPro, setModalPro] = useState(false)
 
   function navClass(name) {
     return `${styles.navItem} ${active === name ? styles.navItemActive : ''}`
   }
 
-async function handleLogout() {
-  try {
-    await axios.post('/api/logout', {}, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-  } catch (error) {}
-  
-  localStorage.removeItem('token')
-  localStorage.removeItem('user')
-  window.location.href = '/logout-web'
-}
+  function navClassBloqueado(name) {
+    return `${styles.navItem} ${styles.navItemBloqueado} ${active === name ? styles.navItemActive : ''}`
+  }
+
+  async function handleLogout() {
+    try {
+      await axios.post('/api/logout', {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+    } catch {}
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    window.location.href = '/logout-web'
+  }
 
   return (
     <aside className={styles.sidebar}>
@@ -50,7 +46,6 @@ async function handleLogout() {
         </span>
       </div>
 
-      {/* Badge dinámico según plan */}
       {isPro
         ? <div className={styles.planBadge}>PRO</div>
         : <div className={styles.planBadgeFree}>GRATUITO</div>
@@ -89,10 +84,25 @@ async function handleLogout() {
         Mis listas
       </Link>
 
-      <Link href="/favoritas" className={navClass('favoritas')}>
-        <Heart size={16} className={styles.navIcon} />
-        Favoritas
-      </Link>
+      {/* Favoritas — solo PRO */}
+      {isPro
+        ? (
+          <Link href="/favoritas" className={navClass('favoritas')}>
+            <Heart size={16} className={styles.navIcon} />
+            Favoritas
+          </Link>
+        )
+        : (
+          <button
+            className={navClassBloqueado('favoritas')}
+            onClick={() => setModalPro(true)}
+          >
+            <Heart size={16} className={styles.navIcon} />
+            Favoritas
+            <span className={styles.lockBadge}>PRO</span>
+          </button>
+        )
+      }
 
       <div className={styles.divider} />
 
@@ -104,18 +114,37 @@ async function handleLogout() {
         Perfil
       </Link>
 
-      <Link href="/estadisticas" className={navClass('estadisticas')}>
-        <BarChart2 size={16} className={styles.navIcon} />
-        Estadísticas
-      </Link>
+      {/* Estadísticas — solo PRO */}
+      {isPro
+        ? (
+          <Link href="/estadisticas" className={navClass('estadisticas')}>
+            <BarChart2 size={16} className={styles.navIcon} />
+            Estadísticas
+          </Link>
+        )
+        : (
+          <button
+            className={navClassBloqueado('estadisticas')}
+            onClick={() => setModalPro(true)}
+          >
+            <BarChart2 size={16} className={styles.navIcon} />
+            Estadísticas
+            <span className={styles.lockBadge}>PRO</span>
+          </button>
+        )
+      }
 
       <Link href="/suscripcion" className={navClass('suscripcion')}>
         <CreditCard size={16} className={styles.navIcon} />
         Suscripción
       </Link>
 
-
-      
+      {/* Modal PRO */}
+      {modalPro && (
+        <ModalPro
+          onAceptar={() => setModalPro(false)}
+        />
+      )}
 
     </aside>
   )
