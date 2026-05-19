@@ -20,8 +20,20 @@ export default function Estadisticas() {
       .finally(() => setCargando(false))
   }, [])
 
-  if (cargando) return <div>Cargando...</div>
-  if (!stats)   return <div>No se pudieron cargar las estadísticas</div>
+  if (cargando || !stats) return (
+    <div className={styles.page}>
+      <img src={fondo} alt="" className={styles.bgImage} />
+      <Sidebar active="estadisticas" />
+      <div className={styles.mainColumn}>
+        <TopBar />
+        <main className={styles.content}>
+          <div className={styles.cargando}>
+            {cargando ? 'Cargando estadísticas...' : 'No se pudieron cargar las estadísticas'}
+          </div>
+        </main>
+      </div>
+    </div>
+  )
 
   const pieSegments = buildPieSegments(stats.genres)
   const barData     = buildBarData(stats.genres)
@@ -33,7 +45,7 @@ export default function Estadisticas() {
       <Sidebar active="estadisticas" />
 
       <div className={styles.mainColumn}>
-        <TopBar username="Usuario" plan="Flicka PRO" />
+        <TopBar />
 
         <main className={styles.content}>
 
@@ -42,7 +54,7 @@ export default function Estadisticas() {
             <p className={styles.pageSubtitle}>Tu actividad en Flicka</p>
           </div>
 
-          {/* ── Fila de KPI cards ── */}
+          {/* ── KPI cards ── */}
           <div className={styles.kpiRow}>
 
             <div className={styles.kpiCard} style={{ background: 'linear-gradient(135deg, #8b1a1a, #c0392b)' }}>
@@ -102,7 +114,6 @@ export default function Estadisticas() {
           {stats.genres.length > 0 && (
             <div className={styles.chartsRow}>
 
-              {/* ── Gráfica de barras ── */}
               <div className={styles.chartCard} style={{ flex: 2 }}>
                 <h2 className={styles.chartTitle}>Películas por género</h2>
                 <div className={styles.barChart}>
@@ -120,7 +131,6 @@ export default function Estadisticas() {
                 </div>
               </div>
 
-              {/* ── Gráfica de pastel ── */}
               <div className={styles.chartCard} style={{ flex: 1 }}>
                 <h2 className={styles.chartTitle}>Distribución</h2>
                 <div className={styles.pieLayout}>

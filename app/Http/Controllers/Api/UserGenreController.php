@@ -18,32 +18,37 @@ class UserGenreController extends Controller
         return response()->json($genres);
     }
 
-    // Guardar géneros favoritos (reemplaza los anteriores)
     public function store(Request $request)
-    {
-        $request->validate([
-            'genres'            => 'required|array|min:1|max:3',
-            'genres.*.genre'    => 'required|string|max:50',
-            'genres.*.position' => 'required|integer|between:1,3',
-        ]);
+{
+    $user = $request->user();
 
-        $user = $request->user();
+    $lastChange = $user->genre_updated_at; // ← snake_case, no camelCase
 
-        // Borra los géneros anteriores
-        UserGenre::where('user_id', $user->id)->delete();
-
-        // Guarda los nuevos
-        foreach ($request->genres as $item) {
-            UserGenre::create([
-                'user_id'  => $user->id,
-                'genre'    => $item['genre'],
-                'position' => $item['position'],
-            ]);
-        }
-
+    if ($lastChange && \Carbon\Carbon::parse($lastChange)->isCurrentMonth()) {
         return response()->json([
-            'message' => 'Géneros favoritos actualizados',
-            'genres'  => UserGenre::where('user_id', $user->id)->orderBy('position')->get()
+            'message' => 'Solo puedes cambiar tus géneros favoritos una vez al mes.'
+        ], 429);
+    }
+
+    $request->validate([
+        'genres'          => 'required|array|min:1|max:3',
+        'genres.*.genre'  => 'required|string|max:50',
+        'genres.*.position' => 'required|integer|min:1|max:3',
+    ]);
+
+    // Borra los anteriores e inserta los nuevos
+    UserGenre::where('user_id', $user->id)->delete();
+
+    foreach ($request->genres as $g) {
+        UserGenre::create([
+            'user_id'  => $user->id,
+            'genre'    => $g['genre'],
+            'position' => $g['position'],
         ]);
     }
+
+    $user->update(['genre_updated_at' => now()]);
+
+    return response()->json(['message' => 'Géneros actualizados correctamente.']);
+}
 }

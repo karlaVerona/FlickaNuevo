@@ -328,3 +328,11 @@
     color: rgba(26, 10, 10, 0.4);
     text-align: center;
 }
+
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}

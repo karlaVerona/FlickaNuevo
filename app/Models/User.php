@@ -19,6 +19,9 @@ class User extends Authenticatable
         'is_pro',
         'bio',
         'photo',
+        'banner', 
+        'color',
+        'genre_updated_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -26,6 +29,7 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
         'is_pro'   => 'boolean',
+        'genre_updated_at' => 'datetime',
     ];
 
     public function reviews()
