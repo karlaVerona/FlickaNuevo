@@ -2,8 +2,8 @@
 
 .page {
     display: flex;
-    height: 100vh;        /* ← cambia min-height por height */
-    overflow: hidden;     /* ← agrega esto */
+    height: 100vh; 
+    overflow: hidden;    
     background: #ffffff;
     font-family: 'Crimson Pro', Georgia, serif;
     position: relative;
@@ -16,7 +16,7 @@
     min-width: 0;
     position: relative;
     z-index: 1;
-    overflow: hidden;     /* ← agrega esto */
+    overflow: hidden;     
 }
 
 .bgImage {
@@ -216,3 +216,10 @@
     color: #e07070;
 }
 
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}

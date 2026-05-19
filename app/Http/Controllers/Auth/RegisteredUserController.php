@@ -5,46 +5,40 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): Response
+    public function create()
     {
-        return Inertia::render('Auth/Register');
+        return inertia('Auth/Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws ValidationException
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',  // sigue llamándose name en el form
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'username' => 'required|string|max:30|unique:users,username',
+            'email'    => 'required|string|email|max:150|unique:users,email',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'username' => $request->name,   // ← guarda name del form en columna username
-            'email' => $request->email,
+            'username' => $request->username,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
+            'role'     => 'user',
+            'is_pro'   => false,
         ]);
 
         event(new Registered($user));
-        Auth::login($user);
-        return redirect(route('peliculas', absolute: false));
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+            'user'  => $user,
+        ], 201);
     }
 }

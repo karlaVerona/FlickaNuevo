@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    protected $table = 'movies';
-
     protected $fillable = [
-        'title',
-        'anio',
-        'director',
-        'genre',
-        'synopsis',
-        'poster'
+        'title', 'director', 'anio', 'genre', 'synopsis', 'poster', 'tags'
     ];
+
+    protected $casts = [
+        'tags' => 'array'
+    ];
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

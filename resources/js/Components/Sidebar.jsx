@@ -1,4 +1,5 @@
-import { Link, router } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
+import axios from 'axios'
 import {
   Film,
   Search,
@@ -16,15 +17,27 @@ import logo from '../../images/logo-Flicka.jpeg'
 
 export default function Sidebar({ active = '' }) {
 
+  // Lee el usuario de localStorage para mostrar el badge correcto
+  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const isPro = user.is_pro === true || user.is_pro === 1
+
   function navClass(name) {
     return `${styles.navItem} ${active === name ? styles.navItemActive : ''}`
   }
 
-  function handleLogout() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.post('/logout')
-  }
+async function handleLogout() {
+  try {
+    await axios.post('/api/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  } catch (error) {}
+  
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  window.location.href = '/logout-web'
+}
 
   return (
     <aside className={styles.sidebar}>
@@ -37,8 +50,11 @@ export default function Sidebar({ active = '' }) {
         </span>
       </div>
 
-      {/* Badge PRO */}
-      <div className={styles.planBadge}>PRO</div>
+      {/* Badge dinámico según plan */}
+      {isPro
+        ? <div className={styles.planBadge}>PRO</div>
+        : <div className={styles.planBadgeFree}>GRATUITO</div>
+      }
 
       {/* ── DESCUBRIR ── */}
       <span className={styles.sectionLabel}>Descubrir</span>
@@ -97,6 +113,7 @@ export default function Sidebar({ active = '' }) {
         <CreditCard size={16} className={styles.navIcon} />
         Suscripción
       </Link>
+
 
       
 

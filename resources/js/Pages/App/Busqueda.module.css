@@ -333,3 +333,11 @@
 .favBtn:hover { color: #e07070; }
 .favBtnActive { color: #e07070; }
 
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+    grid-column: 1 / -1;  
+}

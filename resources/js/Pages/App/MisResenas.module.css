@@ -267,7 +267,7 @@
 
 .resenasGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
 }
 
@@ -445,7 +445,13 @@
     font-weight: 600;
 }
 
-
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}
 
 
 

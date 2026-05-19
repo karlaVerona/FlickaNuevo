@@ -59,7 +59,6 @@
     font-weight: 500;
 }
 
-/* ── FILA DE CONTROLES: búsqueda + filtros juntos ── */
 .controlesRow {
     display: flex;
     align-items: center;
@@ -68,7 +67,6 @@
     flex-wrap: wrap;
 }
 
-/* ── BÚSQUEDA ── */
 .searchBox {
     flex: 1;
     min-width: 200px;
@@ -131,7 +129,6 @@
     margin-left: auto;
 }
 
-/* ── DROPDOWNS ── */
 .dropdown { position: relative; }
 
 .dropdownBtn {
@@ -234,7 +231,7 @@
 }
 
 .card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -280,7 +277,7 @@
 }
 
 .stars {
-    font-size: 0.85rem;
+    font-size: 1.5rem;
     color: #c9a84c;
     letter-spacing: 1px;
 }
@@ -302,7 +299,6 @@
     transform: scale(1.15);
 }
 
-/* ── ESTADOS VACÍOS ── */
 .cargando {
     text-align: center;
     padding: 4rem;

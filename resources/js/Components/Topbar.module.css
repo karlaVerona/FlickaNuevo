@@ -98,3 +98,11 @@
   background: rgba(255,255,255,0.08);
   color: #fff;
 }
+
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}

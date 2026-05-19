@@ -1,0 +1,362 @@
+/* ── OVERLAY ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+/* ── MODAL ── */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: 480px;
+    max-width: 92vw;
+    max-height: 90vh;
+    background: #ffffffde;;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+}
+
+/* ── HEADER ── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    flex-shrink: 0;
+}
+
+.titulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a0a0a;
+}
+
+.cerrarBtn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(20,5,5,0.8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.cerrarBtn:hover { background: #8b1a1a; }
+
+/* ── SECCIÓN DEL AVATAR ── */
+.avatarSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.5rem;
+    background: rgba(146, 125, 58, 0.601);
+    flex-shrink: 0;
+}
+
+.avatarWrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.avatarImg {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid rgba(146, 126, 58, 0.873);;
+}
+
+.avatarInitials {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b1a1a, #c9a84c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    border: 2px solid #e8c0c0;
+}
+
+/* Punto naranja que indica foto pendiente de guardar */
+.avatarPendiente {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ae8c5f;
+    border: 2px solid #fdf0f0;
+}
+
+/* Botón de cámara */
+.avatarUpload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #4a9a8a;
+    border: 1.5px solid #1e0b0b;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.avatarUpload:hover { background: #3a8070; }
+
+.avatarInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.avatarNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #483b17;
+}
+
+.avatarPlan {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #6d5e33;
+    font-weight: 510;
+}
+
+/* Nota de foto pendiente */
+.fotoNota {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    color: rgba(201,168,76,0.7);
+    margin-top: 0.1rem;
+}
+
+/* ── TABS ── */
+.tabs {
+    display: flex;
+    padding: 0 1.5rem;
+    gap: 0.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(146, 125, 58, 0.601);;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -1px;
+}
+
+.tab:hover { color: #eac664; }
+
+.tabActivo {
+    color: #cea021;
+    border-bottom-color: #cea021;
+}
+
+/* ── BODY ── */
+.body {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ae8c5f52 transparent;
+}
+
+.body::-webkit-scrollbar { width: 3px; }
+.body::-webkit-scrollbar-track { background: transparent; }
+.body::-webkit-scrollbar-thumb { background: #ae8c5f52; border-radius: 999px; }
+
+/* ── ALERTAS ── */
+.errorGeneral {
+    padding: 0.65rem 1rem;
+    background: rgba(139,26,26,0.2);
+    border: 1.5px solid rgba(139,26,26,0.4);
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.88rem;
+    color: #e07070;
+}
+
+.exitoMsg {
+    padding: 0.65rem 1rem;
+    background: rgba(74,154,138,0.15);
+    border: 1.5px solid rgba(74,154,138,0.4);
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.88rem;
+    color: #4a9a8a;
+}
+
+/* ── CAMPOS ── */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8d8a8a;
+}
+
+.input {
+    width: 100%;
+    background: rgba(65, 55, 23, 0.601);
+    border: 1.5px solid rgba(65, 55, 23, 0.89);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.input::placeholder { color: rgba(255,255,255,0.2); }
+.input:focus { border-color: rgba(201,168,76,0.5); }
+
+.textarea {
+    width: 100%;
+    background: rgba(65, 55, 23, 0.601);
+    border: 1.5px solid rgba(65, 55, 23, 0.89);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #fff;
+    outline: none;
+    resize: vertical;
+    line-height: 1;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.textarea::placeholder { color: rgba(255,255,255,0.2); }
+.textarea:focus { border-color: rgba(201,168,76,0.5); }
+
+.contador {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.25);
+    text-align: right;
+}
+
+.errorMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #e07070;
+}
+
+/* ── INPUT CONTRASEÑA CON OJO ── */
+.inputPass {
+    position: relative;
+}
+
+.inputPass .input {
+    padding-right: 2.5rem;
+}
+
+.eyeBtn {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.eyeBtn:hover { color: rgba(255,255,255,0.7); }
+
+/* ── FOOTER ── */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+.cancelarBtn {
+    padding: 0.65rem 1.25rem;
+    background: transparent;
+    border: 1.5px solid rgba(146, 125, 58, 0.5);;
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: rgba(146, 125, 58, 0.5);;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cancelarBtn:hover { border-color: rgba(146, 125, 58); color: rgba(146, 125, 58); }
+
+.guardarBtn {
+    padding: 0.65rem 1.5rem;
+    background: #4a9a8a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.guardarBtn:hover:not(:disabled) { background: #3a8070; }
+.guardarBtn:disabled { opacity: 0.65; cursor: not-allowed; }
