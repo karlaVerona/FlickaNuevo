@@ -150,36 +150,20 @@ export default function Perfil() {
             {/* Fila inferior */}
             <div className={styles.filaInferior}>
 
-              {/* Club */}
+                          {/* Club */}
               <section className={`${styles.seccion} ${styles.clubSeccion}`}>
-                <h2 className={styles.seccionTitulo}>El club al que perteneces</h2>
-                {!isPro
-                  ? (
-                    <div className={styles.proLock}>
-                      <span className={styles.proLockIcono}>⭐</span>
-                      <p className={styles.proLockTexto}>
-                        Esta es una función exclusiva de usuario PRO
-                      </p>
-                    </div>
-                  )
-                  : (
-                    <div className={styles.clubCard}>
-                      <div className={styles.clubImgWrapper}>
-                        <div className={styles.clubImgPlaceholder} />
-                      </div>
-                      <div className={styles.clubInfo}>
-                        <span className={styles.clubNombre}>Nombre del club</span>
-                        <p className={styles.clubDesc}>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                          Mauris a fermentum orci. Pellentesque blandit lobortis leo,
-                          at maximus metus gravida sit amet. Orci varius natoque
-                          penatibus et magnis dis parturient montes, nascetur
-                          ridiculus mus. Aliquam eu felis in justo viverra lacinia...
-                        </p>
-                      </div>
-                    </div>
-                  )
-                }
+                  <h2 className={styles.seccionTitulo}>El club al que perteneces</h2>
+                  {!isPro
+                      ? (
+                          <div className={styles.proLock}>
+                              <span className={styles.proLockIcono}>⭐</span>
+                              <p className={styles.proLockTexto}>
+                                  Esta es una función exclusiva de usuario PRO
+                              </p>
+                          </div>
+                      )
+                      : <ClubCard />
+                  }
               </section>
 
               {/* Tu favorito de favoritos */}
@@ -254,4 +238,42 @@ function SixStarCard({ resena }) {
 
     </div>
   )
+}
+
+function ClubCard() {
+    const [club,     setClub]     = useState(null)
+    const [cargando, setCargando] = useState(true)
+
+    useEffect(() => {
+        api.get('/mi-club')
+            .then(res => setClub(res.data.club))
+            .catch(() => {})
+            .finally(() => setCargando(false))
+    }, [])
+
+    if (cargando) return <div className={styles.vacioPequeno}>Cargando club...</div>
+
+    if (!club) return (
+        <p className={styles.vacioPequeno}>
+            Agrega tus géneros favoritos para descubrir tu club
+        </p>
+    )
+
+    return (
+        <div className={styles.clubCard}>
+            <div className={styles.clubImgWrapper}>
+                {club.imagen
+                    ? <img src={club.imagen} alt={club.nombre} className={styles.clubImg} />
+                    : <div className={styles.clubImgPlaceholder}>
+                        <span>{club.emoji}</span>
+                      </div>
+                }
+            </div>
+            <div className={styles.clubInfo}>
+                <span className={styles.clubEmojiBig}>{club.emoji}</span>
+                <span className={styles.clubNombre}>{club.nombre}</span>
+                <p className={styles.clubDesc}>{club.descripcion}</p>
+            </div>
+        </div>
+    )
 }

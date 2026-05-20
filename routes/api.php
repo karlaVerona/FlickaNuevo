@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profile/photo',   [ProfileController::class, 'updatePhoto']);
     Route::post('/profile/banner',  [ProfileController::class, 'updateBanner']);  
     Route::put('/profile/color',    [ProfileController::class, 'updateColor']);   
+    Route::get('/mi-club', [UserGenreController::class, 'miClub']);
 
     // Géneros favoritos
     Route::get('/profile/genres',  [UserGenreController::class, 'index']);
