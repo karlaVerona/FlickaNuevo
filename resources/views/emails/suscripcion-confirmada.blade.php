@@ -47,7 +47,7 @@
                 </div>
                 <div class="fila">
                     <span class="label">Fecha de activación</span>
-                    <span class="valor">{{ now()->format('d/m/Y H:i') }}</span>
+                    <span class="valor">{{ now()->setTimezone('America/Mexico_City')->format('d/m/Y H:i') }}</span>
                 </div>
                 <div class="fila">
                     <span class="label">Estado</span>
