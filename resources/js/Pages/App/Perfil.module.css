@@ -470,18 +470,3 @@
     margin: 0;
     font-style: italic;
 }
-
-.clubImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.clubEmoji {
-    font-size: 3rem;
-}
-
-.clubEmojiBig {
-    font-size: 1.5rem;
-}

@@ -1,0 +1,395 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+.page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: 'Crimson Pro', Georgia, serif;
+    position: relative;
+}
+
+.mainColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.bgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── BANNER ── */
+/* Rectángulo del ancho completo del contenido con el color de la lista */
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2.5rem;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.bannerLeft {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.backBtn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.backBtn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Círculo con fondo blanco semitransparente */
+.iconoCirculo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.392);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.bannerTitulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bannerSubtitulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.2rem;
+}
+
+.editarBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.editarBtn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ── ÁREA DE CONTENIDO ── */
+
+.searchWrapper {
+    position: relative;
+    padding: 1.5rem 2.5rem 0.5rem;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #301413;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    width: 53%;
+}
+
+.searchIcon {
+    color: rgb(255, 226, 147);
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.searchInput::placeholder {
+    color: rgb(239, 207, 120);
+}
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.searchClear:hover {
+    color: #e07070;
+}
+
+/* ── RESULTADOS ── */
+.resultadosDropdown {
+    position: absolute;
+    top: calc(100% - 0.5rem);
+    /* justo debajo del searchRow */
+    left: 2.5rem;
+    margin: 0;
+    background: #2a1010;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    z-index: 50;
+}
+
+.buscandoMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.35);
+    padding: 0.75rem 1rem;
+    width: 50%;
+}
+
+.resultadoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: background 0.12s;
+    text-align: left;
+}
+
+.resultadoItem:last-child {
+    border-bottom: none;
+}
+
+.resultadoItem:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.resultadoItem:disabled {
+    cursor: default;
+}
+
+.resultadoItemActivo {
+    background: rgba(74, 154, 138, 0.08);
+}
+
+.resultadoPoster {
+    width: 32px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.resultadoTitulo {
+    flex: 1;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resultadoAnio {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+
+.yaEstaLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    color: #4a9a8a;
+    flex-shrink: 0;
+}
+
+.agregarLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    color: #c9a84c;
+    flex-shrink: 0;
+}
+
+/* ── GRID DE PELÍCULAS ── */
+.peliculasGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.85rem;
+    padding: 1.5rem 2.5rem 2rem;
+}
+
+.peliculaCard {
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgb(65, 44, 23);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: grab;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    user-select: none;
+}
+
+.peliculaCard:active {
+    cursor: grabbing;
+}
+
+.peliculaCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Wrapper del poster con overlay invisible para capturar el drag */
+.posterWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.peliculaPoster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    /* evita el drag nativo de la imagen */
+}
+
+.peliculaPlaceholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(135deg, rgb(65, 44, 23), rgb(120, 88, 55));
+}
+
+/* Capa transparente encima del poster que captura los eventos de drag */
+.posterOverlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+.peliculaInfo {
+    padding: 0.5rem 0.6rem 0.4rem;
+}
+
+.peliculaTitulo {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.peliculaMeta {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 0.1rem;
+    display: block;
+}
+
+.peliculaAcciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+}
+
+.stars {
+    font-size: 1.5rem;
+    color: #c9a84c;
+    letter-spacing: 1px;
+}
+
+.quitarBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.3);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    margin-top: 4px;
+}
+
+.quitarBtn:hover {
+    color: #e07070;
+}
+
+/* ── VACÍO ── */
+.vacio {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 2.5rem;
+}
+
+.vacioTexto {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+}
+
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}

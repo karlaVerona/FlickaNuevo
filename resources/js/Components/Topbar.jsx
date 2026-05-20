@@ -70,10 +70,13 @@ export default function TopBar() {
           {getInitials(username)}
         </div>
 
-        {/* Botón configuración */}
-        <button className={styles.iconBtn} title="Configuración">
-          <Settings size={16} />
-        </button>
+        <button 
+  className={styles.iconBtn} 
+  title="Configuración"
+  onClick={() => window.location.href = '/perfil'}
+>
+  <Settings size={16} />
+</button>
 
         {/* Botón logout */}
         <button className={styles.iconBtn} title="Cerrar sesión" onClick={handleLogout}>

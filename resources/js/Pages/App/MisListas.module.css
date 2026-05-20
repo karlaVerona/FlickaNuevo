@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+/* ── LAYOUT ── */
+.page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: 'Crimson Pro', Georgia, serif;
+    position: relative;
+}
+
+.mainColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.bgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+}
+
+.pageHeader {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid rgb(138, 111, 34);
+}
+
+.pageTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a0a0a;
+    line-height: 1.1;
+}
+
+.pageSubtitle {
+    font-size: 0.95rem;
+    color: rgb(138, 111, 34);
+    margin-top: 0.3rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+/* ── CONTROLES ── */
+.controlesRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.searchBox {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #301413;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+}
+
+.searchIcon { color: rgb(255, 226, 147); flex-shrink: 0; }
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.searchInput::placeholder { color: rgb(239, 207, 120); }
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.searchClear:hover { color: #e07070; }
+
+.crearBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    background: #4a9a8a;
+    color: #fff;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.crearBtn:hover { background: #3a8070; }
+
+/* ── GRID ── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+/* ── CARD ── */
+.listaCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.listaCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+}
+
+.listaIcono {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.392);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.listaInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.listaNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.listaContador {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+}
+
+.listaEliminarBtn {
+    background: rgba(0,0,0,0.25);
+    border: none;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    padding: 0.35rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+
+.listaEliminarBtn:hover {
+    background: rgba(139,26,26,0.5);
+    color: #e07070;
+}
+
+/* ── VACÍO ── */
+.vacio {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 2rem;
+}
+
+.vacioTexto {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.1rem;
+    color: rgba(26, 10, 10, 0.4);
+}
+
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}
+
+.limiteIndicador {
+    background: rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    margin-left: 0.25rem;
+}

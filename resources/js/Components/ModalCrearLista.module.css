@@ -1,0 +1,368 @@
+/* ── OVERLAY ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+/* ── MODAL ── */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: 540px;
+    max-width: 92vw;
+    max-height: 88vh;
+    background: #2a1010;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+}
+
+/* ── HEADER ── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    flex-shrink: 0;
+}
+
+.titulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.cerrarBtn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(20,5,5,0.8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.cerrarBtn:hover { background: #8b1a1a; }
+
+/* ── BODY ── */
+.body {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ae8c5f52 transparent;
+}
+
+.body::-webkit-scrollbar { width: 3px; }
+.body::-webkit-scrollbar-track { background: transparent; }
+.body::-webkit-scrollbar-thumb { background: #ae8c5f52; border-radius: 999px; }
+
+/* ── FOOTER ── */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+/* ── CAMPOS ── */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+}
+
+.input {
+    background: #4a2820;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input::placeholder { color: rgba(255,255,255,0.25); }
+.input:focus { border-color: rgba(201,168,76,0.5); }
+
+.errorMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #e07070;
+}
+
+/* ── PALETA DE COLORES ── */
+.colorGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.colorBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.colorBtn:hover { transform: scale(1.15); }
+.colorBtnActivo { border-color: #c9a84c; transform: scale(1.15); }
+
+/* ── ICONOS ── */
+.iconoGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.iconoBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.iconoBtn:hover { background: rgba(201,168,76,0.12); }
+.iconoBtnActivo { background: rgba(201,168,76,0.2); border-color: #c9a84c; }
+
+/* ── BÚSQUEDA ── */
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #4a2820;
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid rgba(255,255,255,0.08);
+}
+
+.searchIcon { color: rgb(255, 226, 147); flex-shrink: 0; }
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.searchInput::placeholder { color: rgba(255,255,255,0.25); }
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.searchClear:hover { color: #e07070; }
+
+.buscandoMsg {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.3);
+}
+
+/* ── RESULTADOS ── */
+.resultadosList {
+    background: #1e0b0b;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.resultadoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: background 0.12s;
+    text-align: left;
+}
+
+.resultadoItem:last-child { border-bottom: none; }
+.resultadoItem:hover { background: rgba(255,255,255,0.05); }
+.resultadoItemActivo { background: rgba(74,154,138,0.12); }
+
+.resultadoPoster {
+    width: 28px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.resultadoTitulo {
+    flex: 1;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resultadoAnio {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    flex-shrink: 0;
+}
+
+.checkIcon { color: #4a9a8a; flex-shrink: 0; }
+.plusIcon  { color: rgba(255,255,255,0.35); flex-shrink: 0; }
+
+/* ── CHIPS DE PELÍCULAS SELECCIONADAS ── */
+.seleccionadas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.seleccionadasLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    background: rgba(74,154,138,0.2);
+    border: 1px solid rgba(74,154,138,0.4);
+    border-radius: 999px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.82rem;
+    color: #4a9a8a;
+}
+
+.chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #4a9a8a;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    line-height: 1;
+}
+
+/* ── BOTONES FOOTER ── */
+.cancelarBtn {
+    padding: 0.65rem 1.25rem;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cancelarBtn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+.guardarBtn {
+    padding: 0.65rem 1.5rem;
+    background: #4a9a8a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.guardarBtn:hover:not(:disabled) { background: #3a8070; }
+.guardarBtn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.preview {
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    transition: background 0.2s;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.previewIcono {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.392);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.previewNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
