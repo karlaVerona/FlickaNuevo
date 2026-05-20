@@ -59,66 +59,66 @@ class MovieController extends Controller
     public function sections(Request $request)
     {
         // Últimas 10 agregadas
-        $recientes = Movie::orderBy('id', 'desc')->take(10)->get();
+        $recientes = Movie::orderBy('id', 'desc')->take(15)->get();
 
         // Mejor valoradas — por promedio de reseñas
         $valoradas = Movie::withAvg('reviews', 'rating')
             ->orderBy('reviews_avg_rating', 'desc')
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Modo familia activado — Animación
         $familia = Movie::where('genre', 'Animación')
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Noche de carcajadas — Comedia
         $comedia = Movie::whereIn('genre', ['Comedia', 'Comedia Romántica'])
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Las de terror 😢 — tag triste
         $terror = Movie::whereJsonContains('tags', 'triste')
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Si te atreves — Terror
         $miedo = Movie::where('genre', 'Terror')
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
                 // Fuera de este mundo 
         $scifi = Movie::whereIn('genre', ['Ciencia Ficción', 'Aventura', 'Fantasía'])
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // A todo volumen — Musical
         $musical = Movie::whereIn('genre', ['Musical', 'Comedia Musical'])
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Drama
         $drama = Movie::whereIn('genre', ['Drama'])
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Acción
         $accion = Movie::whereIn('genre', ['Acción', 'Aventura'])
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
 
         // Mariposas en el estómago — tag romantica
         $romantica = Movie::whereJsonContains('tags', 'romantica')
             ->inRandomOrder()
-            ->take(10)
+            ->take(15)
             ->get();
         
         return response()->json([
