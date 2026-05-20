@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\UserGenreController;
 use App\Http\Controllers\Api\StatsController;
+use App\Http\Controllers\Api\SubscriptionController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminStatsController;
@@ -34,7 +35,7 @@ Route::post('/login',    [ApiAuthController::class, 'login']);
 // ─────────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/user', fn(Request $request) => $request->user());
+    Route::get('/user',    fn(Request $request) => $request->user());
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
     // Perfil
@@ -42,10 +43,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile',          [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/photo',   [ProfileController::class, 'updatePhoto']);
+    Route::post('/profile/banner',  [ProfileController::class, 'updateBanner']);
+    Route::put('/profile/color',    [ProfileController::class, 'updateColor']);
 
     // Géneros favoritos
     Route::get('/profile/genres',  [UserGenreController::class, 'index']);
     Route::post('/profile/genres', [UserGenreController::class, 'store']);
+    Route::get('/mi-club',         [UserGenreController::class, 'miClub']);
 
     // Reseñas
     Route::post('/reviews',        [ReviewController::class, 'store']);
@@ -59,20 +63,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
 
     // Listas
-    Route::get('/lists',                               [MovieListController::class, 'index']);
-    Route::post('/lists',                              [MovieListController::class, 'store']);
-    Route::delete('/lists/{id}',                       [MovieListController::class, 'destroy']);
-    Route::post('/lists/{listId}/movies',              [MovieListController::class, 'addMovie']);
-    Route::delete('/lists/{listId}/movies/{movieId}',  [MovieListController::class, 'removeMovie']);
+    Route::get('/lists',                              [MovieListController::class, 'index']);
+    Route::post('/lists',                             [MovieListController::class, 'store']);
+    Route::put('/lists/{id}',                         [MovieListController::class, 'update']);
+    Route::delete('/lists/{id}',                      [MovieListController::class, 'destroy']);
+    Route::post('/lists/{listId}/movies',             [MovieListController::class, 'addMovie']);
+    Route::delete('/lists/{listId}/movies/{movieId}', [MovieListController::class, 'removeMovie']);
 
     // Películas
     Route::get('/movies/sections', [MovieController::class, 'sections']);
     Route::get('/movies/random',   [MovieController::class, 'random']);
+    Route::get('/movies/genres',   [MovieController::class, 'genres']);
     Route::get('/movies',          [MovieController::class, 'index']);
-    Route::get('/movies/genres', [MovieController::class, 'genres']);
-    
+
     // Estadísticas
     Route::get('/stats', [StatsController::class, 'index']);
+
+    // Suscripción
+    Route::get('/subscription',    [SubscriptionController::class, 'index']);
+    Route::post('/subscription',   [SubscriptionController::class, 'store']);
+    Route::delete('/subscription', [SubscriptionController::class, 'destroy']);
+
 });
 
 // ─────────────────────────────────────────────
@@ -82,13 +93,13 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     Route::get('/stats', [AdminStatsController::class, 'index']);
 
-    Route::get('/users',                  [AdminUserController::class, 'index']);
-    Route::get('/users/{user}',           [AdminUserController::class, 'show']);
-    Route::put('/users/{user}',           [AdminUserController::class, 'update']);
-    Route::delete('/users/{user}',        [AdminUserController::class, 'destroy']);
+    Route::get('/users',           [AdminUserController::class, 'index']);
+    Route::get('/users/{user}',    [AdminUserController::class, 'show']);
+    Route::put('/users/{user}',    [AdminUserController::class, 'update']);
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
 
     Route::apiResource('/movies', AdminMovieController::class);
 
-    Route::get('/reviews',                [AdminReviewController::class, 'index']);
-    Route::delete('/reviews/{review}',    [AdminReviewController::class, 'destroy']);
+    Route::get('/reviews',             [AdminReviewController::class, 'index']);
+    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy']);
 });

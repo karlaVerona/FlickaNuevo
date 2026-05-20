@@ -1,0 +1,487 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+/* ── LAYOUT ── */
+.page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: #f5f0ea;
+    position: relative;
+}
+
+.bgImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.mainColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    position: relative; 
+    z-index: 1;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ── HERO BANNER ── */
+.heroBanner {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Imagen del banner (ocupa ancho completo) */
+.bannerImg {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+}
+
+.bannerFoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bannerPlaceholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2a1010 0%, #4a2820 50%, #6b3a1a 100%);
+}
+
+/* Fila avatar + infoBox */
+.avatarArea {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    padding: 0 2.5rem;
+    margin-top: -100px;   
+    padding-bottom: 40px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Avatar */
+.avatarWrapper {
+    position: relative;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.avatarFoto {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 4px solid #f5f0ea;
+    background: #2a1010;
+}
+
+.avatarInitials {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: #2a1010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #e8d5b0;
+    border: 4px solid #f5f0ea;
+}
+
+/* Placa PRO/FREE — encima de la foto */
+.planPlaca {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.22rem 0.9rem;
+    border-radius: 999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.planPlacaPro {
+    background: #c9a84c;
+    color: #1a0a0a;
+}
+
+.planPlacaFree {
+    background: rgb(80, 80, 80);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Recuadro de color con nombre y bio */
+.infoBox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 120px;
+    padding: 1rem 1.5rem 1rem 230px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    transition: background 0.3s;
+    z-index: 1; /* detrás del avatar */
+}
+
+.infoNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #fff;
+    font-style: italic;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    line-height: 1.1;
+}
+
+.infoBio {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ── GRID DE CONTENIDO ── */
+.gridContenido {
+    padding: 0 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.seccion {}
+
+.seccionTitulo {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a0a0a;
+    margin-bottom: 1rem;
+}
+
+/* ── GÉNEROS ── */
+.generosRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.generoCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.generoCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.generoIconoCirculo {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.generoEmoji {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.generoNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ── FILA INFERIOR ── */
+.filaInferior {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* ── CLUB (MOCKUP) ── */
+.clubCard {
+    display: flex;
+    gap: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #2a1010;
+}
+
+.clubImgWrapper {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.clubImgPlaceholder {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    background: linear-gradient(160deg, #4a2820 0%, #6b3a1a 60%, #3a2a1a 100%);
+}
+
+.clubInfo {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: rgba(201,168,76,0.12);
+}
+
+.clubNombre {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #c9a84c;
+}
+
+.clubDesc {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ── SIX STAR CARD ── */
+.sixStarCard {
+    background: #2a1010;
+    border-radius: 14px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.15);
+    height: 100%;
+}
+
+.sixStarPosterCol {
+    width: 140px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem 0.75rem;
+    gap: 0.4rem;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.sixStarPoster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.sixStarPosterPlaceholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(135deg, rgb(65,44,23), rgb(120,88,55));
+    border-radius: 6px;
+}
+
+.sixStarMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.sixStarTitulo {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #e8d5b0;
+    line-height: 1.3;
+}
+
+.sixStarAnio {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+}
+
+.sixStarEstrellas {
+    font-size: 1rem;
+    color: #c9a84c;
+    letter-spacing: 1px;
+    margin-top: 0.1rem;
+}
+
+.sixStarContenido {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.sixStarBox {
+    flex: 1;
+    background: rgb(65, 40, 15);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    overflow: hidden;
+}
+
+.sixStarLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e8d5b0;
+    flex-shrink: 0;
+}
+
+.sixStarTexto {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: #ae8c5f52 transparent;
+}
+
+.sixStarTexto::-webkit-scrollbar { width: 3px; }
+.sixStarTexto::-webkit-scrollbar-thumb { background: #ae8c5f52; border-radius: 999px; }
+
+.sixStarMood {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.65rem;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    align-self: flex-start;
+    flex-shrink: 0;
+}
+
+.moodIcono {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #4a2820;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c9a84c;
+    flex-shrink: 0;
+}
+
+.moodLabel {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.moodValor {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: #ffe08c;
+    font-weight: 600;
+}
+
+/* ── ESTADO VACÍO ── */
+.vacioPequeno {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.92rem;
+    color: rgba(26,10,10,0.4);
+    font-style: italic;
+}
+
+.cargando {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    color: rgba(26, 10, 10, 0.4);
+    text-align: center;
+    padding: 4rem 2.5rem;
+}
+
+.proLock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2.5rem 1.5rem;
+    background: #2a1010;
+    border-radius: 14px;
+    border: 1px solid rgba(201,168,76,0.15);
+    text-align: center;
+    height: 100%;
+    min-height: 140px;
+}
+
+.proLockIcono {
+    font-size: 2rem;
+    opacity: 0.4;
+}
+
+.proLockTexto {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.35);
+    margin: 0;
+    font-style: italic;
+}
+
+.clubImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.clubEmoji {
+    font-size: 3rem;
+}
+
+.clubEmojiBig {
+    font-size: 1.5rem;
+}
