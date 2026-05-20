@@ -94,13 +94,13 @@ class UserGenreController extends Controller
                 'nombre'      => 'La Medianoche',
                 'emoji'       => '',
                 'descripcion' => 'Eres valiente, intenso y te encanta vivir al límite. Tienes una mente brillante que no descansa fácilmente, y por eso disfrutas las historias que te mantienen al borde del asiento. Te gusta adivinar el giro antes de que llegue, y cuando no puedes, te emociona más. Eres de los que apagan todas las luces para ver mejor, de los que no se asustan con facilidad pero secretamente buscan esa sensación. La gente te admira porque tienes carácter, y tus recomendaciones siempre son las más memorables de la noche.',
-                'imagen'      => '/cartas/Medianoche.png',
+                'imagen'      => '/cartas/Medianoche.jpg',
             ],
             'Maratón'      => [
                 'nombre'      => 'El Sol',
                 'emoji'       => '',
                 'descripcion' => 'Eres espontáneo, curioso y tienes una energía que contagia a todos a tu alrededor. Te encanta reír a carcajadas, explorar mundos nuevos y disfrutar cada momento sin complicarlo demasiado. Cuando algo te gusta, quieres más, y eso se nota en todo lo que haces. Eres el tipo de persona que convierte un plan sencillo en una aventura épica, y tus amigos saben que contigo nunca hay un momento aburrido. Tienes un lado juguetón que nunca has perdido, y eso, aunque no lo sepas, es uno de tus mejores regalos.',
-                'imagen'      => '/cartas/Sol.png',
+                'imagen'      => '/cartas/Sol.jpg',
             ],
             'Sin Corazón'  => [
                 'nombre'      => 'La Marea',
@@ -124,19 +124,19 @@ class UserGenreController extends Controller
                 'nombre'      => 'La llama',
                 'emoji'       => '',
                 'descripcion' => 'Eres apasionado, empático y te conectas con los demás de una manera que pocos logran. Te gustan las historias que te revuelven algo por dentro, las que te hacen pensar en tu propia vida mientras las ves. Eres de los que sienten todo con una intensidad que a veces sorprende hasta a ti mismo. Tienes una inteligencia emocional enorme y la gente lo nota: siempre sabes qué decir, siempre sabes cómo estar. Una buena película para ti no es la que tiene el mejor presupuesto, sino la que te deja sintiéndote menos solo en el mundo.',
-                'imagen'      => '/cartas/Llama.png',
+                'imagen'      => '/cartas/Llama.jpg',
             ],
             'Heroico'      => [
                 'nombre'      => 'El Trueno',
                 'emoji'       => '',
                 'descripcion' => 'Eres leal, determinado y tienes un sentido de la justicia que no negocias con nadie. Te inspiran las personas que luchan por algo más grande que ellas mismas, y eso dice mucho de quién eres tú también. Te gusta la adrenalina, los momentos épicos y las historias donde el esfuerzo tiene recompensa. Eres de los que se levantan del sillón sin darse cuenta en la escena final, de los que salen del cine con energía extra. La gente confía en ti porque saben que cuando dices que vas a estar, estás. Eres, aunque no lo digas, el héroe de tu propia historia.',
-                'imagen'      => '/cartas/Trueno.png',
+                'imagen'      => '/cartas/Trueno.jpg',
             ],
             'Espontáneo'   => [
                 'nombre'      => 'El loco',
                 'emoji'       => '',
                 'descripcion' => 'Eres libre, impredecible y tienes una personalidad que no cabe en ningún molde, y eso te hace fascinante. Un día quieres terror, al otro una comedia, y a veces terminas llorando con algo que ni tenías planeado ver. Te guías por el instinto, por el estado de ánimo, por lo que te pida el cuerpo en ese momento. Eres curioso, abierto y nunca prejuzgas una historia antes de darle oportunidad. La gente que te conoce sabe que siempre tienes una recomendación inesperada y siempre acierta. Eres el tipo de espectador que el cine ama, porque lo ves todo con ojos nuevos cada vez.',
-                'imagen'      => '/cartas/Loco.png',
+                'imagen'      => '/cartas/Loco.jpg',
             ],
         ];
 
